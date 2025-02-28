@@ -1,128 +1,77 @@
-# Code of Conduct
 
-## Our Pledge
 
-We as members, contributors, and leaders pledge to make participation in our
-community a harassment-free experience for everyone, regardless of age, body
-size, visible or invisible disability, ethnicity, sex characteristics, gender
-identity and expression, level of experience, education, socio-economic status,
-nationality, personal appearance, race, religion, or sexual identity
-and orientation.
+# Code of Conduct for DSCI 310 2024W2 Group 5
 
-We pledge to act and interact in ways that contribute to an open, welcoming,
-diverse, inclusive, and healthy community.
+## ** Our Pledge**
 
-## Our Standards
+As members of this project, we recognize that a successful and productive team thrives on mutual respect, collaboration, and accountability. We pledge to create an environment where every member feels heard, valued, and empowered to contribute their best work. We commit to fostering a culture of learning, adaptability, and shared responsibility, ensuring that our project is not only a technical success but also a positive and inclusive experience for all involved. We hold ourselves accountable to these values and will work together to uphold them throughout the duration of this project.
 
-Examples of behavior that contributes to a positive environment for our
-community include:
+## **Statement on Diversity and Inclusivity**
 
-* Demonstrating empathy and kindness toward other people
-* Being respectful of differing opinions, viewpoints, and experiences
-* Giving and gracefully accepting constructive feedback
-* Accepting responsibility and apologizing to those affected by our mistakes,
-  and learning from the experience
-* Focusing on what is best not just for us as individuals, but for the
-  overall community
+We are committed to fostering an inclusive and respectful environment where all individuals — regardless of background, identity, or experience — can collaborate, learn, and contribute meaningfully to our project. Our community values diversity and recognizes that a broad range of perspectives enhances innovation and problem-solving. Discrimination, harassment, or exclusion of any kind will not be tolerated.
 
-Examples of unacceptable behavior include:
+## **Expected Behavior**
 
-* The use of sexualized language or imagery, and sexual attention or
-  advances of any kind
-* Trolling, insulting or derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information, such as a physical or email
-  address, without their explicit permission
-* Other conduct which could reasonably be considered inappropriate in a
-  professional setting
+All members of the project team are expected to:
 
-## Enforcement Responsibilities
+- Communicate respectfully and professionally at all times.
+- Actively listen and consider differing viewpoints.
+- Provide constructive feedback and accept it graciously.
+- Contribute to discussions and tasks in a meaningful, honest, and collaborative manner.
+- Acknowledge and credit the work of others appropriately.
+- Support and uplift team members, ensuring an equitable distribution of workload.
+- Respect deadlines and responsibilities to maintain the integrity of the project.
+- Contribute a fair amount of work that reflects their capabilities.
 
-Community leaders are responsible for clarifying and enforcing our standards of
-acceptable behavior and will take appropriate and fair corrective action in
-response to any behavior that they deem inappropriate, threatening, offensive,
-or harmful.
+## **Unacceptable Behavior**
 
-Community leaders have the right and responsibility to remove, edit, or reject
-comments, commits, code, wiki edits, issues, and other contributions that are
-not aligned to this Code of Conduct, and will communicate reasons for moderation
-decisions when appropriate.
+Unacceptable behavior includes, but is not limited to:
 
-## Scope
+- Discriminatory comments or actions based on race, ethnicity, gender, sexual orientation, religion, disability, or any other characteristic.
+- Harassment, including but not limited to, personal attacks, intimidation, or bullying.
+- Inappropriate or offensive language, including sexualized or derogatory remarks.
+- Disrupting group discussions or project workflow.
+- Plagiarism, misrepresentation of contributions, or failure to credit others' work.
+- Unauthorized sharing of project-related confidential data or discussions.
+- Repeated failure to meet agreed-upon responsibilities without proper communication.
 
-This Code of Conduct applies within all community spaces, and also applies when
-an individual is officially representing the community in public spaces.
-Examples of representing our community include using an official e-mail address,
-posting via an official social media account, or acting as an appointed
-representative at an online or offline event.
+## **Consequences of Unacceptable Behavior**
 
-## Enforcement
+Violation of this Code of Conduct will result in appropriate consequences, which may include the following, depending on the severity and frequency of the behavior:
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the community leaders responsible for enforcement at
-.
-All complaints will be reviewed and investigated promptly and fairly.
+### **1. First and Second Warning**
+- A private discussion with the project lead to clarify the nature of the violation and provide guidance on expected behavior.
+- A request for a formal acknowledgment of the issue and a commitment to improved conduct.
 
-All community leaders are obligated to respect the privacy and security of the
-reporter of any incident.
+### **2. Discussion with a TA (Third Warning)**
+- If unacceptable behavior continues after two warnings, the individual will be required to meet with a Teaching Assistant (TA) to discuss the issue in detail.
+- The TA may recommend additional corrective actions, such as additional accountability measures or mediation with affected team members.
 
-## Enforcement Guidelines
+### **3. Discussion with Professor Chen**
+- In cases of severe misconduct or repeated violations, the group will have to consult with the course instructor.
+- This may result in removal from the project and/or serious detriment to project grade.
 
-Community leaders will follow these Community Impact Guidelines in determining
-the consequences for any action they deem in violation of this Code of Conduct:
+## **Reporting and Enforcement Procedures**
 
-### 1. Correction
+### **How to Report an Issue**
 
-**Community Impact**: Use of inappropriate language or other behavior deemed
-unprofessional or unwelcome in the community.
+If you experience or witness unacceptable behavior, you should:
+- Report the issue directly to the group chat (on Instagram).
+- If the issue still is not resolved, or there is a repeat, report to the TA.
+- Reports should include a clear description of the incident, any evidence (if available), and the names of any witnesses.
 
-**Consequence**: A private, written warning from community leaders, providing
-clarity around the nature of the violation and an explanation of why the
-behavior was inappropriate. A public apology may be requested.
+### **Handling Reports**
 
-### 2. Warning
+All reports will be handled with fairness:
+- The TA or instructor will conduct an initial review of the complaint.
+- The individual accused of the violation will be given an opportunity to provide their perspective.
+- A decision will be made in consultation with relevant academic personnel if necessary.
+- Follow-up actions will be taken, including regular check-ins to ensure the resolution of the issue.
 
-**Community Impact**: A violation through a single incident or series
-of actions.
+### **No Retaliation Policy**
 
-**Consequence**: A warning with consequences for continued behavior. No
-interaction with the people involved, including unsolicited interaction with
-those enforcing the Code of Conduct, for a specified period of time. This
-includes avoiding interactions in community spaces as well as external channels
-like social media. Violating these terms may lead to a temporary or
-permanent ban.
+Retaliation against anyone who reports a violation or participates in an investigation is strictly prohibited. Any attempt to intimidate or penalize a person for reporting misconduct will itself be treated as a serious violation of this Code of Conduct.
 
-### 3. Temporary Ban
+## **Final Notes**
 
-**Community Impact**: A serious violation of community standards, including
-sustained inappropriate behavior.
-
-**Consequence**: A temporary ban from any sort of interaction or public
-communication with the community for a specified period of time. No public or
-private interaction with the people involved, including unsolicited interaction
-with those enforcing the Code of Conduct, is allowed during this period.
-Violating these terms may lead to a permanent ban.
-
-### 4. Permanent Ban
-
-**Community Impact**: Demonstrating a pattern of violation of community
-standards, including sustained inappropriate behavior,  harassment of an
-individual, or aggression toward or disparagement of classes of individuals.
-
-**Consequence**: A permanent ban from any sort of public interaction within
-the community.
-
-## Attribution
-
-This Code of Conduct is adapted from the [Contributor Covenant][homepage],
-version 2.0, available at
-https://www.contributor-covenant.org/version/2/0/code_of_conduct.html.
-
-Community Impact Guidelines were inspired by [Mozilla's code of conduct
-enforcement ladder](https://github.com/mozilla/diversity).
-
-[homepage]: https://www.contributor-covenant.org
-
-For answers to common questions about this code of conduct, see the FAQ at
-https://www.contributor-covenant.org/faq. Translations are available at
-https://www.contributor-covenant.org/translations.
+This Code of Conduct is a living document and may be updated as needed to ensure it remains effective and relevant to the project community. All team members are encouraged to provide feedback on how we can improve our commitment to an inclusive and respectful working environment.
