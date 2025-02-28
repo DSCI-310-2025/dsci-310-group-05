@@ -1,4 +1,9 @@
-# dsci-310-group-05
+# Milestone 1 - DSCI 310 Group 5
 
-https://archive.ics.uci.edu/dataset/19/car+evaluation
-push test
+## Project Authors
+- Nika Karimi Seffat
+- Ethan Wang
+- Gautam Arora
+- Kevin Li
+
+
