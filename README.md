@@ -56,6 +56,7 @@ cd dsci-310-group-05/
 
 - ggplot2
 - dplyr
+- tidyr
 - caret
 - class
 
