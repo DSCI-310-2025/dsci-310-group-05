@@ -1,17 +1,18 @@
-name: Build and Run Docker Compose
+name: Docker Compose CI/CD
 
 on:
   push:
     branches:
-      - main
+      - nika_working_branch
   pull_request:
+  workflow_dispatch:  # Allows manual execution
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-and-run:
+    runs-on: ubuntu-latest  # Use Ubuntu runner
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
@@ -22,8 +23,33 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Build Docker Images
-        run: docker-compose build
+      - name: Build and Run Containers
+        run: |
+          docker-compose up --build -d
 
-      - name: Run Docker Containers
-        run: docker-compose up -d 
+      - name: Wait for Jupyter to be Ready
+        run: |
+          echo "Waiting for Jupyter Notebook to start..."
+          sleep 10
+          curl --retry 10 --retry-delay 5 --fail http://localhost:8888 || exit 1
+
+      - name: List Running Containers
+        run: docker ps -a
+
+      - name: List Files in Container
+        run: docker exec $(docker ps -q -f name=dsci-310-group-05-rstudio-1) ls -la /home/jovyan
+
+      - name: Upload Logs on Failure
+        if: failure()
+        run: |
+          mkdir -p logs
+          docker logs $(docker ps -q -f name=dsci-310-group-05-rstudio-1) > logs/container.log
+          tar -cvf logs.tar logs
+        continue-on-error: true
+
+      - name: Upload Log Artifact
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-logs
+          path: logs.tar
