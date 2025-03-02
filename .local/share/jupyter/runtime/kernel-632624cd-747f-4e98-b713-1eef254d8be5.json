@@ -1,0 +1,13 @@
+{
+  "shell_port": 32797,
+  "iopub_port": 38015,
+  "stdin_port": 59369,
+  "control_port": 38229,
+  "hb_port": 42729,
+  "ip": "127.0.0.1",
+  "key": "70e65ac0-da1f9903f69bab49afc8e7bb",
+  "transport": "tcp",
+  "signature_scheme": "hmac-sha256",
+  "kernel_name": "ir",
+  "jupyter_session": "/home/jovyan/Car_Evaluation_Analysis.ipynb"
+}
