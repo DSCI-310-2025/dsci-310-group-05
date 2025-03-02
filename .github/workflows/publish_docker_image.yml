@@ -1,55 +1,42 @@
-name: Docker Compose CI/CD
+name: Publish Docker image
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
-      - nika_working_branch
-  pull_request:
-  workflow_dispatch:  # Allows manual execution
+    paths:
+      - 'Dockerfile'
+      - .github/workflows/publish_docker_image.yml # or whatever you named the file
+      - 'conda-linux-64.lock'
 
 jobs:
-  build-and-run:
-    runs-on: ubuntu-latest  # Use Ubuntu runner
-
+  push_to_registry:
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Check out the repo
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      - name: Build and Run Containers
-        run: |
-          docker-compose up --build -d
-
-      - name: Wait for Jupyter to be Ready
-        run: |
-          echo "Waiting for Jupyter Notebook to start..."
-          sleep 10
-          curl --retry 10 --retry-delay 5 --fail http://localhost:8888 || exit 1
-
-      - name: List Running Containers
-        run: docker ps -a
-
-      - name: Upload Logs on Failure
-        if: failure()
-        run: |
-          mkdir -p logs
-          docker logs $(docker ps -q -f name=dsci-310-group-05-rstudio-1) > logs/container.log
-          tar -cvf logs.tar logs
-        continue-on-error: true
-
-      - name: Upload Log Artifact
-        if: failure()
-        uses: actions/upload-artifact@v4  # ✅ Updated to v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
         with:
-          name: docker-logs
-          path: logs.tar
+          username: ${{ secrets.DOCKER_USERNAME }} # do not change, add as secret
+          password: ${{ secrets.DOCKER_PASSWORD }} # do not change, add as secret
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: kevinl002/dsci-310-group-05-container # change to your image
+          tags: |
+            type=raw, value={{sha}},enable=${{github.ref_type != 'tag' }}
+            type=raw, value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           
