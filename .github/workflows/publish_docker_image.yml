@@ -3,6 +3,7 @@ name: Docker Compose CI/CD
 on:
   push:
     branches:
+      - main
       - nika_working_branch
   pull_request:
   workflow_dispatch:  # Allows manual execution
@@ -49,7 +50,7 @@ jobs:
 
       - name: Upload Log Artifact
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # ✅ Updated to v4
         with:
           name: docker-logs
           path: logs.tar
