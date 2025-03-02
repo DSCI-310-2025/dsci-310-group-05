@@ -17,7 +17,7 @@ RUN python3 -m venv /opt/venv && \
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Install IRkernel and required R packages
-RUN R -e "install.packages(c('IRkernel', 'class', 'caret', 'dplyr', 'ggplot2', 'pbdZMQ'))" && \
+RUN R -e "install.packages(c('IRkernel', 'class', 'caret', 'dplyr', 'ggplot2', 'tidyr', 'pbdZMQ'))" && \
     R -e "IRkernel::installspec(user = FALSE)"
 
 # Expose RStudio (8787) and Jupyter Notebook (8888)
