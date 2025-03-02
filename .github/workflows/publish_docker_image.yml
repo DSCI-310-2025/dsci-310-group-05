@@ -37,9 +37,6 @@ jobs:
       - name: List Running Containers
         run: docker ps -a
 
-      - name: List Files in Container
-        run: docker exec $(docker ps -q -f name=dsci-310-group-05-rstudio-1) ls -la /home/jovyan
-
       - name: Upload Logs on Failure
         if: failure()
         run: |
@@ -54,3 +51,5 @@ jobs:
         with:
           name: docker-logs
           path: logs.tar
+
+          
