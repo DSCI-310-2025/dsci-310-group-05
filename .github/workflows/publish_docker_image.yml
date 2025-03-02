@@ -1,40 +1,41 @@
-name: Docker Compose CI/CD
+name: Publish Docker image
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main  # Runs when you push to main
-  pull_request:
-    branches:
-      - main
+    paths:
+      - 'Dockerfile'
+      - .github/workflows/publish_docker_image.yml # or whatever you named the file
+      - 'conda-linux-64.lock'
 
 jobs:
-  build:
+  push_to_registry:
+    name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Check out the repo
+        uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }} # do not change, add as secret
+          password: ${{ secrets.DOCKER_PASSWORD }} # do not change, add as secret
 
-      - name: Build Docker image
-        run: |
-          docker-compose build
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: kevinl002/dsci-310-group-05-container # change to your image
+          tags: |
+            type=raw, value={{sha}},enable=${{github.ref_type != 'tag' }}
+            type=raw, value=latest
 
-      - name: Run Docker container
-        run: |
-          docker-compose up -d
-
-      - name: Check running containers
-        run: docker ps -a
-
-      - name: Test Jupyter Notebook Access
-        run: |
-          sleep 10  # Give Jupyter some time to start
-          curl --fail http://localhost:8888 || (echo "Jupyter failed to start" && exit 1)
-
-      - name: Stop Docker containers
-        if: always()
-        run: docker-compose down
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
