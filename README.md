@@ -44,6 +44,25 @@ cd dsci-310-group-05/
 - Run `localhost:8888` on your browser.
 - Then, you can run the analysis in the Jupyter Notebook.
 
+### Alternative: Run the Pre-Built Docker Image (Recommended)
+If you don't want to build the container manually, you can use our pre-built image from DockerHub.
+
+1. **Pull the latest Docker image from DockerHub:**
+
+   Have docker open and run: `docker pull kevinl002/dsci-310-group-05-container:latest` in terminal
+
+2. **Run the container:**
+
+ `docker run -it --rm -p 8787:8787 -p 8888:8888 kevinl002/dsci-310-group-05-container:latest` in terminal
+
+3. **Access Jupyter Notebook:**:
+
+- Again run: `http://localhost:8888` on your browser to access the analysis in Jupyter Notebook
+
+### DockerHub Repository
+You can find our Docker images here:  
+👉 [DockerHub: kevinl002/dsci-310-group-05](https://hub.docker.com/r/kevinl002/dsci-310-group-05-container)
+
 ## Dependencies
 
 **System Dependencies:**
