@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  rstudio:
+    image: jupyter/r-notebook
+    ports:
+      - "8787:8787"
+      - "8888:8888"
+    environment:
+      - JUPYTER_TOKEN=  # Disable token authentication
+      - JUPYTER_ENABLE_LAB=yes  # Ensure Jupyter Lab is enabled
+    volumes:
+      - .:/home/jupyter/work  # Mount the current directory
+    working_dir: /home/jupyter/work  # Set working directory
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''  # Disable both token & password
+    restart: unless-stopped

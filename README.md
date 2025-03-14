@@ -35,26 +35,14 @@ cd dsci-310-group-05/
 - [Install Docker on macOS](https://docs.docker.com/docker-for-mac/install/)
 - [Install Docker on Linux](https://docs.docker.com/engine/install/)
 
-3. **Within your local computer, set up the environment using Docker image:**
+3. **To build and run the container:**
 
-- Windows users, run the following:
+`docker-compose up --build -d`
 
-```bash
-docker build -t TBD .
-```
+4. **Access Jupyter Notebook:**
 
-```bash
-docker run -it --rm -p 8787:8787 -v /$(pwd):/home/TBD
-```
-- Mac users, run the following:
-
-```bash
-docker build --platform=linux/amd64 -t TBD .
-```
-
-```bash
-docker run --platform=linux/amd64 -it --rm -p 8787:8787 -v /$(pwd):/home/TBD
-```
+- Run `localhost:8888` on your browser.
+- Then, you can run the analysis in the Jupyter Notebook.
 
 ## Dependencies
 
@@ -62,10 +50,13 @@ docker run --platform=linux/amd64 -it --rm -p 8787:8787 -v /$(pwd):/home/TBD
 
 - Docker
 - Git (for cloning the repository)
+- Docker Image: jupyter/r-notebook
 
 **R Dependencies:**
 
-- tidyverse
+- ggplot2
+- dplyr
+- tidyr
 - caret
 - class
 
