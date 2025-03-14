@@ -1,0 +1,19 @@
+FROM rocker/rstudio:4.3.2
+
+WORKDIR /home/rstudio/work
+
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libxml2-dev
+
+RUN R -e "install.packages(c('tidyverse', 'class', 'caret', 'IRkernel'), repos='https://cloud.r-project.org/')"
+
+RUN R -e "IRkernel::installspec(user = FALSE)"
+
+RUN pip3 install --no-cache-dir notebook jupyterlab
+
+EXPOSE 8888
+
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
