@@ -13,7 +13,13 @@
 
 ## Summary
 
-This project, developed as part of DSCI-310 (2025), analyzes a car evaluation dataset from the [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Car+Evaluation) to predict car safety ratings (low, medium, high) using the k-Nearest Neighbors (kNN) algorithm. The dataset includes 1,728 entries with categorical features: buying price, maintenance cost, number of doors, passenger capacity, luggage boot size, and safety level.
+This project analyzes the Car Evaluation Dataset from [UCI Machine Learning Repository](https://archive.ics.uci.edu/ml/datasets/Car+Evaluation), which contains 1,728 records with six categorical attributes: buying price, maintenance cost, number of doors, passenger capacity, luggage space, and safety rating. The dataset was clean, with no missing values or duplicates, and required ordinal encoding for machine learning analysis.
+
+Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the "class" variable was highly imbalanced, with "unacceptable" accounting for 1,210 instances and "very good" only 65 instances. The k-Nearest Neighbors (kNN) model was trained to predict safety levels using the other features, achieving an accuracy of 46.96% with an optimal k of 17—an improvement over random guessing (33.3%) but highlighting the model's limited predictive power.
+
+The findings indicate that individual features do not strongly determine safety levels independently, suggesting the need for more complex models or additional variables. These results have implications for both vehicle safety assessment and methodological best practices in categorical data analysis, reinforcing the importance of feature selection and encoding techniques for machine learning applications.
+
+
 
 ## How To Run:
 
