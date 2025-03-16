@@ -4,6 +4,7 @@
 .ipynb_checkpoints
 .npm\_logs
 .local\share\jupyter
+data\clean
 
 # Session Data files
 .RData
