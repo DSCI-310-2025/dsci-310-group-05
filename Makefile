@@ -15,16 +15,16 @@ output/knn_model.RDS output/cf_matrix.png: 04-knn-analysis-and-cf-matrix.R data/
 	Rscript 04-knn-analysis-and-cf-matrix.R --input_file=data/clean/car_clean.csv --output_prefix=output/knn_model
 
 # Render the Quarto report
-reports/report.html: reports/report.qmd data/original/car_data.csv output/eda_summary.csv output/cf_matrix.png
-	quarto render reports/report.qmd --to html
+reports/Car_Evaluation_Analysis_initial.html: reports/Car_Evaluation_Analysis_initial.qmd data/original/car_data.csv output/eda_summary.csv output/cf_matrix.png
+	quarto render reports/Car_Evaluation_Analysis_initial.qmd --to html
 
 # Generate PDF report (optional)
-reports/report.pdf: reports/report.qmd data/original/car_data.csv output/eda_summary.csv output/cf_matrix.png
-	quarto render reports/report.qmd --to pdf
+reports/Car_Evaluation_Analysis_initial.pdf: reports/Car_Evaluation_Analysis_initial.qmd data/original/car_data.csv output/eda_summary.csv output/cf_matrix.png
+	quarto render reports/Car_Evaluation_Analysis_initial.qmd --to pdf
 
 # Final index.html (direct render)
-index.html: reports/report.qmd data/original/car_data.csv output/eda_summary.csv output/cf_matrix.png
-	quarto render reports/report.qmd --output index.html
+index.html: reports/Car_Evaluation_Analysis_initial.qmd data/original/car_data.csv output/eda_summary.csv output/cf_matrix.png
+	quarto render reports/Car_Evaluation_Analysis_initial.qmd --output index.html
 
 # Clean everything
 clean:

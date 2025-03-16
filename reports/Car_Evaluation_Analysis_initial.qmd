@@ -19,20 +19,13 @@ execute:
 
 # **Car Evaluation Analysis**
 
-```{r, echo=FALSE, output=FALSE}
-# First, we will load the required libraries necessary to perform data wrangling, visualization, and analysis.
-library(ggplot2) # Contains dplyr, ggplot2, and other libraries to perform data cleaning and visualization.
-library(dplyr)
-library(class) # For the kNN Classifier.
-library(caret) # For train-test-split and cross-validation.
-library(tidyr)
+```{r, echo=FALSE, include=FALSE}
+# Load dataset from pre-saved output (Ensure it's in memory)
+if (!file.exists("data/original/car_data.csv")) {
+  stop("ERROR: data/original/car_data.csv not found! Run `make` first.")
+}
 
-# Loading the dataset from the web
-url <- "https://archive.ics.uci.edu/ml/machine-learning-databases/car/car.data"
-car_data <- read.csv(url, header = FALSE, stringsAsFactors = TRUE) # since all input variables are categorical, we set the data type to a factor.
-
-# Display first few rows
-head(car_data)
+car_data <- read.csv("data/original/car_data.csv", stringsAsFactors = TRUE)
 
 # Assigning the column names
 colnames(car_data) <- c("buying", "maint", "doors", "persons", "lug_boot", "safety", "class")
