@@ -16,9 +16,6 @@ opt <- docopt(doc)
 # Reads the dataset from the URL provided as a command-line argument.
 car_data <- read.csv(opt$file_path, header = FALSE, stringsAsFactors = TRUE) #Converts string-based categorical variables into factors.
 
-# Clean column names
-car_data <- janitor::clean_names(car_data)
-
 # Saves the downloaded dataset to the file path specified in the command-line argument.
 write.csv(car_data, opt$output_path, row.names = FALSE) #Ensures that row indices are not written into the output file.
 
