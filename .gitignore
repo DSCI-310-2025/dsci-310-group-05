@@ -2,7 +2,8 @@
 .Rhistory
 .Rapp.history
 .ipynb_checkpoints
-
+.npm\_logs
+.local\share\jupyter
 
 # Session Data files
 .RData
