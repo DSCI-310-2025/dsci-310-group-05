@@ -17,7 +17,13 @@ opt <- docopt(doc)
 car_data_encoded <- read.csv(opt$input_file)
 
 # Summary statistics
-summary(car_data_encoded)
+summary_stats <- summary(car_data_encoded)
+
+# Convert summary output to a dataframe
+summary_df <- as.data.frame(do.call(rbind, lapply(summary_stats, as.list)))
+
+# Save summary statistics as RDS and CSV
+saveRDS(summary_df, paste0(opt$output_prefix, "_summary_stats.rds"))
 
 # Count occurrences for each unique value in each column
 car_data_encoded %>%
@@ -25,6 +31,12 @@ car_data_encoded %>%
   group_by(Variable, Value) %>%
   summarise(Count = n(), .groups = "drop") %>%
   arrange(Variable, desc(Count))
+
+# Convert summary output to a dataframe
+car_data_frequency_df <- as.data.frame(do.call(rbind, lapply(car_data_encoded, as.list)))
+
+# Save summary statistics as RDS and CSV
+saveRDS(car_data_frequency_df, paste0(opt$output_prefix, "car_data_encoded.rds"))
 
 # Convert encoded variables back to categorical labels
 car_data_labeled <- car_data_encoded %>%

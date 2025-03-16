@@ -12,7 +12,7 @@ Usage:
 
 opt <- docopt(doc)
 
-car_data <- readr::read_csv(opt$input_file)
+car_data <- read.csv(opt$input_file, stringsAsFactors = TRUE)
 
 # Clean column names
 car_data <- janitor::clean_names(car_data)
@@ -61,11 +61,11 @@ encode_safety <- function(x) {
 }
 
 # Apply encoding to all columns, including safety separately
-car_data_clean <- car_data %>%
+car_clean <- car_data %>%
   mutate(across(-safety, encode_levels)) %>%
   mutate(safety = encode_safety(safety))
 
 # Save cleaned dataset
-write.csv(car_data_clean, opt$output_file, row.names = FALSE)
+write.csv(car_clean, opt$output_file, row.names = FALSE)
 
 print("The data is cleaned and ready for EDA!")

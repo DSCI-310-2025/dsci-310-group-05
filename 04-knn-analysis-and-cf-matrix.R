@@ -13,7 +13,7 @@ Usage:
 
 opt <- docopt(doc)
 
-# Load cleaned data, not the raw data (from step 2)
+# Load cleaned dataset
 car_data_encoded <- read.csv(opt$input_file)
 
 set.seed(123)  # Ensure reproducibility
@@ -30,7 +30,6 @@ test_data <- car_data_prepared[-train_index, ]
 # Separate features and target variable
 train_x <- train_data %>% select(-safety)
 train_y <- train_data$safety
-
 test_x <- test_data %>% select(-safety)
 test_y <- test_data$safety
 
@@ -51,6 +50,10 @@ for (k in k_values) {
 best_k <- cv_results$k[which.max(cv_results$accuracy)]
 best_cv_accuracy <- max(cv_results$accuracy)
 
+# Save best k and best CV accuracy for Quarto report
+saveRDS(best_k, paste0(opt$output_prefix, "_best_k.rds"))
+saveRDS(best_cv_accuracy, paste0(opt$output_prefix, "_best_cv_accuracy.rds"))
+
 cat("Best k:", best_k, "\n")
 cat("Best CV accuracy:", round(best_cv_accuracy * 100, 2), "%\n")
 
@@ -63,12 +66,18 @@ final_knn_model <- train(train_x, train_y, method = "knn",
 predictions <- predict(final_knn_model, test_x)
 test_accuracy <- sum(predictions == test_y) / length(test_y)
 
+# Save test accuracy for Quarto report
+saveRDS(test_accuracy, paste0(opt$output_prefix, "_test_accuracy.rds"))
+
 cat("Test Accuracy:", round(test_accuracy * 100, 2), "%\n")
 
-# Confusion Matrix
+# Generate Confusion Matrix
 conf_matrix <- confusionMatrix(predictions, test_y)
 conf_matrix_df <- as.data.frame(conf_matrix$table)
 colnames(conf_matrix_df) <- c("True_Label", "Predicted_Label", "Count")
+
+# Save confusion matrix for Quarto
+saveRDS(conf_matrix_df, paste0(opt$output_prefix, "_confusion_matrix.rds"))
 
 # Plot Confusion Matrix
 p <- ggplot(conf_matrix_df, aes(x = Predicted_Label, y = True_Label, fill = Count)) +
