@@ -85,10 +85,47 @@ You can find our Docker images here:
 - caret
 - class
 
+## Makefile Overview
+
+The `Makefile` automates the data processing pipeline, defining rules for downloading, cleaning, analyzing, and visualizing the car dataset. To execute a specific rule, run "make <`rule`>" in the bash terminal within the repository.
+
+#### Targets:
+- **`data/original/car_data.csv`**:
+Dependency: 01-load_data_from_web.R
+Action: Downloads the raw car data from the UCI repository and saves it as car_data.csv.
+
+- **`data/clean/car_clean.csv`**:
+Dependency: data/original/car_data.csv (output from the previous rule)
+Action: Cleans the downloaded data using 02-clean_car_data.R and saves it as car_clean.csv.
+
+- **`output/eda_summary.csv`**:
+Dependency: data/clean/car_clean.csv (processed data)
+Action: Generates summary statistics and exploratory data analysis (EDA) results using 03-eda-and-summary-stats.R.
+
+- **`output/knn_model.RDS output/cf_matrix.png`**:
+Dependency: data/clean/car_clean.csv
+Action: Trains a KNN model and generates a confusion matrix using 04-knn-analysis-and-cf-matrix.R.
+
+- **`index.html`**:
+Dependency: report.qmd, output/eda_summary.csv, output/cf_matrix.png
+Action: Renders a Quarto report into an HTML file using the summary statistics and confusion matrix.
+
+- **`clean`**:
+Action: Cleans up the project by removing all intermediate and output files (data/clean/*, index.html, .pdf, .png).
+
+- **`all`**:
+Action: Specifies the complete sequence of tasks to be executed by Make:
+Download data.
+Clean the data.
+Generate summary statistics and EDA plots.
+Train the KNN model and produce the confusion matrix.
+Render the final HTML report.
+
 ## Licenses
 
 These are the licences contained in LICENSE.md:
 
 - MIT License
+- CC0 1.0 Universal
 
 ![GitHub license](https://img.shields.io/github/license/DSCI-310-2025/dsci-310-group-7-data-dudes) 

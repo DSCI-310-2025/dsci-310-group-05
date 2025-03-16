@@ -51,7 +51,7 @@ p1 <- ggplot(car_data_labeled, aes(x = buying, fill = safety)) +
   labs(title = "Distribution of Buying Price by Safety Level", 
        x = "Buying Price", y = "Count", fill = "Safety Level") +
   theme_minimal() + larger_theme
-ggsave(paste0(opt$output_prefix, "_buying_safety.png"), plot = p1)
+ggsave(file.path("output", paste0(basename(opt$output_prefix), "_buying_safety.png")), plot = p1)
 
 # Plot 2: Distribution of Number of Persons by Safety Level
 p2 <- ggplot(car_data_labeled, aes(x = persons, fill = safety)) +
@@ -59,7 +59,7 @@ p2 <- ggplot(car_data_labeled, aes(x = persons, fill = safety)) +
   labs(title = "Distribution of Number of Persons by Safety Level", 
        x = "Number of Persons", y = "Count", fill = "Safety Level") +
   theme_minimal() + larger_theme
-ggsave(paste0(opt$output_prefix, "_persons_safety.png"), plot = p2)
+ggsave(file.path("output", paste0(basename(opt$output_prefix), "_persons_safety.png")), plot = p2)
 
 # Plot 3: Distribution of Maintenance Cost by Safety Level
 p3 <- ggplot(car_data_labeled, aes(x = maint, fill = safety)) +
@@ -67,6 +67,6 @@ p3 <- ggplot(car_data_labeled, aes(x = maint, fill = safety)) +
   labs(title = "Distribution of Maintenance Cost by Safety Level", 
        x = "Maintenance Cost", y = "Count", fill = "Safety Level") +
   theme_minimal() + larger_theme
-ggsave(paste0(opt$output_prefix, "_maint_safety.png"), plot = p3)
+ggsave(file.path("output", paste0(basename(opt$output_prefix), "_maint_safety.png")), plot = p3)
 
 print("Exploratory Data Analysis Completed!")

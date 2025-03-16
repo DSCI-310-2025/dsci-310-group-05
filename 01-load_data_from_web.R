@@ -1,15 +1,15 @@
 library(docopt)
 library(readr)
 library(janitor)
-"""
+
+doc <- "
 This script loads in the data from the UCI website.
 This dataset contains categorical variables describing various attributes of cars, 
   including qualities of car features, which will be used for classification.
 
 Usage:
   01-load_data_from_web.R --file_path=<file_path> --output_path=<output_path>
-""" -> doc
-
+"
 # Parsing command line arguments based on the usage string provided at the top of the script.
 opt <- docopt(doc)
 
