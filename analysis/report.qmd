@@ -5,9 +5,6 @@ format:
   html:
     toc: true
     number-sections: true
-  pdf:
-    toc: true
-    number-sections: true
 toc: true
 toc-title: Outline
 toc-location: body
@@ -179,7 +176,7 @@ To answer this question, we will use the Car Evaluation Dataset from UC Irvineâ€
 
 ### **Data Loading**
 
-The dataset was retrieved from an online source and loaded into R for analysis using the read.csv function. This dataset contains categorical variables describing various attributes of cars, which will be used for classification. @tbl_data
+The dataset was retrieved from an online source and loaded into R for analysis using the read.csv function. This dataset contains categorical variables describing various attributes of cars, which will be used for classification.
 
 ```{r, echo=FALSE, output=FALSE}
 # First, we will load the required libraries necessary to perform data wrangling, visualization, and analysis.
@@ -305,13 +302,15 @@ summary(car_data_encoded)
 
 ```{r, echo=FALSE}
 #| label: tbl-cnt
-#| tbl-cap: "Unique Occurances Count"
+#| tbl-cap: "Unique Occurrences Count"
 # Count occurrences for each unique value in each column
 car_data_summary <- car_data_encoded %>%
   pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
   group_by(Variable, Value) %>%
   summarise(Count = n(), .groups = "drop") %>%
   arrange(Variable, desc(Count))
+
+print(car_data_summary)
 ```
 
 @tbl-cnt provides a clearer picture of the dataset's distribution across categorical variables. The `buying`, `maint`, and `doors` features all have an even distribution, with each level appearing `r car_data_summary[1, "Count"]` times, suggesting a balanced dataset for these features. The `safety`, `lug_boot` and `persons` features are also evenly distributed across its three levels, with `r car_data_summary[13, "Count"]` occurrences each, ensuring no significant class imbalance in this variable. However, the `class` is highly imbalanced, with "unacc" (encoded as 1) making up the majority (`r car_data_summary[5, "Count"]` occurrences), while "vgood" (encoded as 4) is rare (only `r car_data_summary[8, "Count"]` occurrences). Since we are not using the `class` variable in our analysis, this is not much of a concern. 
