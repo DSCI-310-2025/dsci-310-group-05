@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Car Evaluation Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="Car_Evaluation_Analysis_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Car_Evaluation_Analysis_files/libs/quarto-html/quarto.js"></script>
+<script src="Car_Evaluation_Analysis_files/libs/quarto-html/popper.min.js"></script>
+<script src="Car_Evaluation_Analysis_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Car_Evaluation_Analysis_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Car_Evaluation_Analysis_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Car_Evaluation_Analysis_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Car_Evaluation_Analysis_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Car_Evaluation_Analysis_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Car_Evaluation_Analysis_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><strong>Car Evaluation Analysis</strong></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="dsci-310-2024w-group-5" class="level3">
+<h3 class="anchored" data-anchor-id="dsci-310-2024w-group-5">DSCI 310 2024W Group 5</h3>
+<section id="authors" class="level4">
+<h4 class="anchored" data-anchor-id="authors">Authors:</h4>
+<ul>
+<li>Nika Karimi Seffat</li>
+<li>Ethan Wang</li>
+<li>Gautam Arora</li>
+<li>Kevin Li</li>
+</ul>
+</section>
+</section>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction"><strong>Introduction</strong></h2>
+<p><strong>Background</strong>:</p>
+<p>Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people’s daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40,000 fatalities (Wikipedia Contributors, 2019). Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.</p>
+<p>Research has shown that consumers are willing to invest in vehicle safety. For example, Andersson (2008) found that Swedish drivers were willing to pay a premium for improved car design and build quality to reduce the risk of injury in accidents. Additionally, design and material choices play a critical role in determining a vehicle’s safety. Nygren (1983) found that factors such as a car’s weight, seatbelt design, and headrests significantly influenced accident survivability. More recently, Richter et al.&nbsp;(2005) demonstrated that passive safety improvements—such as enhanced structural integrity and interior design modifications—have contributed to a measurable decline in injury rates from car accidents. These findings highlight the importance of identifying key factors that contribute to vehicle safety.</p>
+<p>Given this context, our research project aims to answer the following question:</p>
+<p><strong>Can we predict the estimated safety of a car using various attributes, such as its buying price, capacity (persons), and maintenance cost?</strong></p>
+<p>To answer this question, we will use the Car Evaluation Dataset from UC Irvine’s Machine Learning Repository. This multivariate classification dataset contains six car design and classification variables, and includes 1,728 observations. Key variables that will be central to our analysis include the car’s buying price, maintenance cost, seating capacity (in terms of the number of passengers it can accommodate), and the car’s evaluation level (categorized as unacceptable, acceptable, good, or very good).</p>
+</section>
+<section id="methods-and-results" class="level2">
+<h2 class="anchored" data-anchor-id="methods-and-results"><strong>Methods and Results</strong></h2>
+<section id="data-loading" class="level3">
+<h3 class="anchored" data-anchor-id="data-loading"><strong>Data Loading</strong></h3>
+<p>The dataset was retrieved from an online source and loaded into R for analysis using the read.csv function. This dataset contains categorical variables describing various attributes of cars, which will be used for classification.</p>
+<div id="cell-5" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First, we will load the required libraries necessary to perform data wrangling, visualization, and analysis.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2) <span class="co"># Contains dplyr, ggplot2, and other libraries to perform data cleaning and visualization.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(class) <span class="co"># For the kNN Classifier.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret) <span class="co"># For train-test-split and cross-validation.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: ‘dplyr’
+
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+
+Loading required package: lattice
+</code></pre>
+</div>
+</div>
+<div id="cell-6" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Loading the dataset from the web</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://archive.ics.uci.edu/ml/machine-learning-databases/car/car.data"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>car_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(url, <span class="at">header =</span> <span class="cn">FALSE</span>, <span class="at">stringsAsFactors =</span> <span class="cn">TRUE</span>) <span class="co"># since all input variables are categorical, we set the data type to a factor.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display first few rows</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(car_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 7</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">V1</th>
+<th data-quarto-table-cell-role="th" scope="col">V2</th>
+<th data-quarto-table-cell-role="th" scope="col">V3</th>
+<th data-quarto-table-cell-role="th" scope="col">V4</th>
+<th data-quarto-table-cell-role="th" scope="col">V5</th>
+<th data-quarto-table-cell-role="th" scope="col">V6</th>
+<th data-quarto-table-cell-role="th" scope="col">V7</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>small</td>
+<td>low</td>
+<td>unacc</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>small</td>
+<td>med</td>
+<td>unacc</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>small</td>
+<td>high</td>
+<td>unacc</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>med</td>
+<td>low</td>
+<td>unacc</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>med</td>
+<td>med</td>
+<td>unacc</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>med</td>
+<td>high</td>
+<td>unacc</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation.</p>
+<div id="cell-8" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assigning the column names</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(car_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"buying"</span>, <span class="st">"maint"</span>, <span class="st">"doors"</span>, <span class="st">"persons"</span>, <span class="st">"lug_boot"</span>, <span class="st">"safety"</span>, <span class="st">"class"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(car_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 7</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">buying</th>
+<th data-quarto-table-cell-role="th" scope="col">maint</th>
+<th data-quarto-table-cell-role="th" scope="col">doors</th>
+<th data-quarto-table-cell-role="th" scope="col">persons</th>
+<th data-quarto-table-cell-role="th" scope="col">lug_boot</th>
+<th data-quarto-table-cell-role="th" scope="col">safety</th>
+<th data-quarto-table-cell-role="th" scope="col">class</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;fct&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>small</td>
+<td>low</td>
+<td>unacc</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>small</td>
+<td>med</td>
+<td>unacc</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>small</td>
+<td>high</td>
+<td>unacc</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>med</td>
+<td>low</td>
+<td>unacc</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>med</td>
+<td>med</td>
+<td>unacc</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>vhigh</td>
+<td>vhigh</td>
+<td>2</td>
+<td>2</td>
+<td>med</td>
+<td>high</td>
+<td>unacc</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="data-wrangling-and-cleaning" class="level4">
+<h4 class="anchored" data-anchor-id="data-wrangling-and-cleaning"><strong>Data Wrangling and Cleaning</strong></h4>
+<div id="cell-10" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking for missing values:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(car_data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+0
+</div>
+</div>
+<p>Amazing! No missing values to drop or account for.</p>
+<div id="cell-12" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check for duplicate values:</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove duplicate rows (if any)</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>car_data <span class="ot">&lt;-</span> car_data <span class="sc">%&gt;%</span> <span class="fu">distinct</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(car_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+1728
+</div>
+</div>
+<p>We have the same number of rows as before - there were no duplicate rows!</p>
+</section>
+<section id="data-types" class="level4">
+<h4 class="anchored" data-anchor-id="data-types">Data Types</h4>
+<p>Since k-Nearest Neighbors (kNN) is a distance-based algorithm, it requires numerical input for feature comparisons. However, our dataset currently consists of categorical variables (all factors in R).</p>
+<div id="cell-15" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Every variable in this dataset is an ordinal variable - it falls under the categorical variables that have a natural relationship or hierarchy to them.</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># We can use ordinal encoding to transform these factor variables into double so kNN can be used on them. Scaling is NOT needed here.</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define encoding function for all categorical features (</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>encode_levels <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">case_when</span>(</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"vhigh"</span>  <span class="sc">~</span> <span class="dv">4</span>,   </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"high"</span>   <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"med"</span>    <span class="sc">~</span> <span class="dv">2</span>, </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"low"</span>    <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"big"</span>    <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"small"</span>  <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"more"</span>   <span class="sc">~</span> <span class="dv">5</span>,   <span class="co"># 'more' in persons column treated as 5</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"5more"</span>  <span class="sc">~</span> <span class="dv">5</span>,   <span class="co"># '5more' in doors column treated as 5</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"2"</span>      <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"3"</span>      <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"4"</span>      <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"unacc"</span>  <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"acc"</span>    <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"good"</span>   <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"vgood"</span>  <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span>          <span class="sc">~</span> <span class="fu">as.numeric</span>(x) <span class="co"># Default conversion for numbers</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Encoding safety separately to avoid duplicate "low", "med", "high"</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>encode_safety <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">case_when</span>(</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"low"</span>  <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"med"</span>  <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    x <span class="sc">==</span> <span class="st">"high"</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span>        <span class="sc">~</span> <span class="fu">as.numeric</span>(x)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply encoding to all columns, including safety separately</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>car_data_encoded <span class="ot">&lt;-</span> car_data <span class="sc">%&gt;%</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="sc">-</span>safety, encode_levels)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">safety =</span> <span class="fu">encode_safety</span>(safety))  <span class="co"># Encode safety</span></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Display first few rows</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(car_data_encoded)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A data.frame: 6 × 7</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">buying</th>
+<th data-quarto-table-cell-role="th" scope="col">maint</th>
+<th data-quarto-table-cell-role="th" scope="col">doors</th>
+<th data-quarto-table-cell-role="th" scope="col">persons</th>
+<th data-quarto-table-cell-role="th" scope="col">lug_boot</th>
+<th data-quarto-table-cell-role="th" scope="col">safety</th>
+<th data-quarto-table-cell-role="th" scope="col">class</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">1</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">2</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">3</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">4</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th" scope="row">5</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th" scope="row">6</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Since we converted the text into numerical variables, we have attached the description of each numerical value per feature below for reference:</strong></p>
+<p><strong><code>buying</code> and <code>maint</code></strong> - low: 1 - med: 2 - high: 3 - vhigh: 4</p>
+<p><strong><code>doors</code> and <code>persons</code></strong> - The values are technically numerical, but they only fall into 3 or 4 categories and are not continuous.</p>
+<p><strong><code>lug_boot</code> and <code>safety</code></strong> - small/low: 1 - med: 2 - big/high: 3</p>
+<p><strong><code>class</code></strong> - unacc (unacceptable): 1 - acc (acceptable): 2 - good: 3 - vgood: 4</p>
+<p><strong>The data has been cleaned and is ready for analysis!</strong></p>
+</section>
+<section id="summary-of-data" class="level4">
+<h4 class="anchored" data-anchor-id="summary-of-data"><strong>Summary of Data</strong></h4>
+<div id="cell-19" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(car_data_encoded)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>     buying         maint          doors         persons         lug_boot
+ Min.   :1.00   Min.   :1.00   Min.   :2.00   Min.   :2.000   Min.   :1  
+ 1st Qu.:1.75   1st Qu.:1.75   1st Qu.:2.75   1st Qu.:2.000   1st Qu.:1  
+ Median :2.50   Median :2.50   Median :3.50   Median :4.000   Median :2  
+ Mean   :2.50   Mean   :2.50   Mean   :3.50   Mean   :3.667   Mean   :2  
+ 3rd Qu.:3.25   3rd Qu.:3.25   3rd Qu.:4.25   3rd Qu.:5.000   3rd Qu.:3  
+ Max.   :4.00   Max.   :4.00   Max.   :5.00   Max.   :5.000   Max.   :3  
+     safety      class      
+ Min.   :1   Min.   :1.000  
+ 1st Qu.:1   1st Qu.:1.000  
+ Median :2   Median :1.000  
+ Mean   :2   Mean   :1.415  
+ 3rd Qu.:3   3rd Qu.:2.000  
+ Max.   :3   Max.   :4.000  </code></pre>
+</div>
+</div>
+<div id="cell-20" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count occurrences for each unique value in each column</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>car_data_encoded <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Variable"</span>, <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Variable, Value) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">Count =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Variable, <span class="fu">desc</span>(Count))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>A tibble: 25 × 3</caption>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" scope="col">Variable</th>
+<th data-quarto-table-cell-role="th" scope="col">Value</th>
+<th data-quarto-table-cell-role="th" scope="col">Count</th>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th" scope="col">&lt;chr&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;dbl&gt;</th>
+<th data-quarto-table-cell-role="th" scope="col">&lt;int&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>buying</td>
+<td>1</td>
+<td>432</td>
+</tr>
+<tr class="even">
+<td>buying</td>
+<td>2</td>
+<td>432</td>
+</tr>
+<tr class="odd">
+<td>buying</td>
+<td>3</td>
+<td>432</td>
+</tr>
+<tr class="even">
+<td>buying</td>
+<td>4</td>
+<td>432</td>
+</tr>
+<tr class="odd">
+<td>class</td>
+<td>1</td>
+<td>1210</td>
+</tr>
+<tr class="even">
+<td>class</td>
+<td>2</td>
+<td>384</td>
+</tr>
+<tr class="odd">
+<td>class</td>
+<td>3</td>
+<td>69</td>
+</tr>
+<tr class="even">
+<td>class</td>
+<td>4</td>
+<td>65</td>
+</tr>
+<tr class="odd">
+<td>doors</td>
+<td>2</td>
+<td>432</td>
+</tr>
+<tr class="even">
+<td>doors</td>
+<td>3</td>
+<td>432</td>
+</tr>
+<tr class="odd">
+<td>doors</td>
+<td>4</td>
+<td>432</td>
+</tr>
+<tr class="even">
+<td>doors</td>
+<td>5</td>
+<td>432</td>
+</tr>
+<tr class="odd">
+<td>lug_boot</td>
+<td>1</td>
+<td>576</td>
+</tr>
+<tr class="even">
+<td>lug_boot</td>
+<td>2</td>
+<td>576</td>
+</tr>
+<tr class="odd">
+<td>lug_boot</td>
+<td>3</td>
+<td>576</td>
+</tr>
+<tr class="even">
+<td>maint</td>
+<td>1</td>
+<td>432</td>
+</tr>
+<tr class="odd">
+<td>maint</td>
+<td>2</td>
+<td>432</td>
+</tr>
+<tr class="even">
+<td>maint</td>
+<td>3</td>
+<td>432</td>
+</tr>
+<tr class="odd">
+<td>maint</td>
+<td>4</td>
+<td>432</td>
+</tr>
+<tr class="even">
+<td>persons</td>
+<td>2</td>
+<td>576</td>
+</tr>
+<tr class="odd">
+<td>persons</td>
+<td>4</td>
+<td>576</td>
+</tr>
+<tr class="even">
+<td>persons</td>
+<td>5</td>
+<td>576</td>
+</tr>
+<tr class="odd">
+<td>safety</td>
+<td>1</td>
+<td>576</td>
+</tr>
+<tr class="even">
+<td>safety</td>
+<td>2</td>
+<td>576</td>
+</tr>
+<tr class="odd">
+<td>safety</td>
+<td>3</td>
+<td>576</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This frequency table provides a clearer picture of the dataset’s distribution across categorical variables. The <code>buying</code>, <code>maint</code>, and <code>doors</code> features all have an even distribution, with each level appearing 432 times, suggesting a balanced dataset for these features. The <code>safety</code>, <code>lug_boot</code> and <code>persons</code> features are also evenly distributed across its three levels, with 576 occurrences each, ensuring no significant class imbalance in this variable. However, the <code>class</code> is highly imbalanced, with “unacc” (encoded as 1) making up the majority (1,210 occurrences), while “vgood” (encoded as 4) is rare (only 65 occurrences). Since we are not using the <code>class</code> variable in our analysis, this is not much of a concern.</p>
+<p><strong>Our x and y variables all have sufficient data points for analysis!</strong></p>
+</section>
+<section id="eda-analysis---visualization" class="level4">
+<h4 class="anchored" data-anchor-id="eda-analysis---visualization"><strong>EDA Analysis - Visualization</strong></h4>
+<div id="cell-23" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert encoded variables back to their categorical labels</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar plot of safety distribution</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>car_data_labeled <span class="ot">&lt;-</span> car_data_encoded <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">buying =</span> <span class="fu">factor</span>(buying, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"med"</span>, <span class="st">"high"</span>, <span class="st">"vhigh"</span>)),</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">maint =</span> <span class="fu">factor</span>(maint, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"low"</span>, <span class="st">"med"</span>, <span class="st">"high"</span>, <span class="st">"vhigh"</span>)),</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">persons =</span> <span class="fu">factor</span>(persons, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"2"</span>, <span class="st">"4"</span>, <span class="st">"5+"</span>)), </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">class =</span> <span class="fu">factor</span>(class, <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"unacc"</span>, <span class="st">"acc"</span>, <span class="st">"good"</span>, <span class="st">"vgood"</span>)),</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">safety =</span> <span class="fu">as.factor</span>(safety)  <span class="co"># Keep safety as a factor for color coding</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Define a larger theme for all plots</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>larger_theme <span class="ot">&lt;-</span> <span class="fu">theme</span>(</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">face =</span> <span class="st">"bold"</span>), <span class="co"># Larger title</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>),  <span class="co"># Larger axis labels</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),  <span class="co"># Larger axis values</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">14</span>),  <span class="co"># Larger legend title</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>)  <span class="co"># Larger legend values</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Increase figure size, default size is not very readable</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">repr.plot.width =</span> <span class="dv">10</span>, <span class="at">repr.plot.height =</span> <span class="dv">6</span>)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 1: Distribution of Buying Price by Safety Level</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(car_data_labeled, <span class="fu">aes</span>(<span class="at">x =</span> buying, <span class="at">fill =</span> safety)) <span class="sc">+</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Buying Price by Safety Level"</span>,</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Buying Price"</span>, <span class="at">y =</span> <span class="st">"Count"</span>, <span class="at">fill =</span> <span class="st">"Safety Level"</span>) <span class="sc">+</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> larger_theme</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 2: Distribution of Number of Persons by Safety Level</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(car_data_labeled, <span class="fu">aes</span>(<span class="at">x =</span> persons, <span class="at">fill =</span> safety)) <span class="sc">+</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Number of Persons by Safety Level"</span>,</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Number of Persons"</span>, <span class="at">y =</span> <span class="st">"Count"</span>, <span class="at">fill =</span> <span class="st">"Safety Level"</span>) <span class="sc">+</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> larger_theme</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot 3: Distribution of Maintenance Cost by Safety Level</span></span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(car_data_labeled, <span class="fu">aes</span>(<span class="at">x =</span> maint, <span class="at">fill =</span> safety)) <span class="sc">+</span></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position =</span> <span class="st">"dodge"</span>) <span class="sc">+</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Maintenance Cost by Safety Level"</span>,</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Maintenance Cost"</span>, <span class="at">y =</span> <span class="st">"Count"</span>, <span class="at">fill =</span> <span class="st">"Safety Level"</span>) <span class="sc">+</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> larger_theme</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Car_Evaluation_Analysis_files/figure-html/cell-10-output-1.png" width="600" height="360" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Car_Evaluation_Analysis_files/figure-html/cell-10-output-2.png" width="600" height="360" class="figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Car_Evaluation_Analysis_files/figure-html/cell-10-output-3.png" width="600" height="360" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Figure 1: Histograms of Safety Across 3 Input Variables: Buying Price, Capacity (Number of Persons), and Maintenance Cost</strong></p>
+<p>As we saw in the summary table, all the safety levels are evenly distributed across each of the independent variables.</p>
+<p><strong>Initial Observations</strong></p>
+<p>The histograms indicate that the safety levels (1, 2, and 3) are evenly distributed across all three independent variables: buying price, number of persons, and maintenance cost. This suggests that the dataset is well-balanced with respect to safety levels, meaning that safety is not disproportionately concentrated in any particular category of these features. However, we do not observe significant variation is observed in the distribution of safety across these variables.</p>
+<p><strong>Proceeding with Analysis</strong></p>
+<p>While individual variables may not show a strong distinction in safety levels on their own, the interaction between multiple features could still be meaningful for classification. Just because safety is evenly distributed across each independent variable separately doesn’t mean that a combination of factors (e.g., high buying price + low maintenance + more persons) won’t reveal patterns that help predict safety levels.</p>
+</section>
+<section id="knn-classification-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="knn-classification-analysis"><strong>kNN Classification Analysis</strong></h4>
+<div id="cell-28" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># We put this to ensure reproducibility in our data, since splitting into training and test splits will be random.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert categorical variables to factors</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>car_data_prepared <span class="ot">&lt;-</span> car_data_encoded <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">safety =</span> <span class="fu">as.factor</span>(safety))  <span class="co"># The target variable must be a factor for classification models in R</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Split the dataset into training (80%) and testing (20%) sets</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># This ensures that the model is trained on one portion of the data and tested on unseen data for evaluation</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>train_index <span class="ot">&lt;-</span> <span class="fu">createDataPartition</span>(car_data_prepared<span class="sc">$</span>safety, <span class="at">p =</span> <span class="fl">0.8</span>, <span class="at">list =</span> <span class="cn">FALSE</span>)  <span class="co"># Randomly select 80% of data for training</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>train_data <span class="ot">&lt;-</span> car_data_prepared[train_index, ]  <span class="co"># Training data</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> car_data_prepared[<span class="sc">-</span>train_index, ]  <span class="co"># Testing data</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate features and target variable</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>train_x <span class="ot">&lt;-</span> train_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>safety)  <span class="co"># Predictor variables</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>train_y <span class="ot">&lt;-</span> train_data<span class="sc">$</span>safety               <span class="co"># Target variable</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>test_x <span class="ot">&lt;-</span> test_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>safety)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>test_y <span class="ot">&lt;-</span> test_data<span class="sc">$</span>safety</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-29" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define k values to test (odd values to prevent ties)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>k_values <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">21</span>, <span class="dv">2</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Store cross-validation results</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>cv_results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">k =</span> <span class="fu">integer</span>(), <span class="at">accuracy =</span> <span class="fu">numeric</span>())  </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform cross-validation for each k value</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (k <span class="cf">in</span> k_values) {</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set.seed</span>(<span class="dv">123</span>)  <span class="co"># Ensure reproducibility in CV</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  knn_model <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    train_x, train_y, <span class="at">method =</span> <span class="st">"knn"</span>,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"cv"</span>, <span class="at">number =</span> <span class="dv">5</span>),  <span class="co"># 5-fold CV</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">tuneGrid =</span> <span class="fu">data.frame</span>(<span class="at">k =</span> k)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Store cross-validation accuracy</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  cv_results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(cv_results, <span class="fu">data.frame</span>(<span class="at">k =</span> k, <span class="at">accuracy =</span> <span class="fu">max</span>(knn_model<span class="sc">$</span>results<span class="sc">$</span>Accuracy)))</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Best k based on cross-validation accuracy</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>best_k <span class="ot">&lt;-</span> cv_results<span class="sc">$</span>k[<span class="fu">which.max</span>(cv_results<span class="sc">$</span>accuracy)]</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>best_cv_accuracy <span class="ot">&lt;-</span> <span class="fu">max</span>(cv_results<span class="sc">$</span>accuracy)  <span class="co"># Best cross-validation accuracy</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Best k found through cross-validation:"</span>, best_k, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Best cross-validation accuracy:"</span>, <span class="fu">round</span>(best_cv_accuracy <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Best k found through cross-validation: 17 
+Best cross-validation accuracy: 47.22 %</code></pre>
+</div>
+</div>
+<div id="cell-30" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Train the final model with the best k</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>final_knn_model <span class="ot">&lt;-</span> <span class="fu">train</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  train_x, train_y, <span class="at">method =</span> <span class="st">"knn"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">trControl =</span> <span class="fu">trainControl</span>(<span class="at">method =</span> <span class="st">"none"</span>),  <span class="co"># No CV, just final training</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">tuneGrid =</span> <span class="fu">data.frame</span>(<span class="at">k =</span> best_k)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate predictions on the test set</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>predictions <span class="ot">&lt;-</span> <span class="fu">predict</span>(final_knn_model, test_x)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute test accuracy</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>test_accuracy <span class="ot">&lt;-</span> <span class="fu">sum</span>(predictions <span class="sc">==</span> test_y) <span class="sc">/</span> <span class="fu">length</span>(test_y)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Test Set Accuracy:"</span>, <span class="fu">round</span>(test_accuracy <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">"%</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Test Set Accuracy: 46.09 %</code></pre>
+</div>
+</div>
+<p>The final kNN model achieved 46.09% accuracy, which is somewhat reflective of the CV accuracy of 47.22%. This is not a great accuracy, but it’s better than random guessing, which would be ~33.33%.</p>
+</section>
+<section id="visualization-of-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="visualization-of-analysis"><strong>Visualization of Analysis</strong></h4>
+<p>Since we are using multiple input variables for our kNN classification, it wouldn’t be possible to graph it out 2D. We will do a <strong>confusion matrix</strong> as our visualization.</p>
+<div id="cell-34" class="cell" data-vscode="{&quot;languageId&quot;:&quot;r&quot;}" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the confusion matrix to evaluate model performance</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This compares the predicted labels (final_knn) with the actual test labels (test_y)</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>conf_matrix <span class="ot">&lt;-</span> <span class="fu">confusionMatrix</span>(predictions, test_y)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert confusion matrix into a tidy format for plotting</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co"># The confusionMatrix function stores results in a table format, so we extract and reformat it</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>conf_matrix_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(conf_matrix<span class="sc">$</span>table)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename columns for clarity (matching true and predicted values)</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(conf_matrix_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"True_Label"</span>, <span class="st">"Predicted_Label"</span>, <span class="st">"Count"</span>)</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot a heatmap to visualize classification performance</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(conf_matrix_df, <span class="fu">aes</span>(<span class="at">x =</span> Predicted_Label, <span class="at">y =</span> True_Label, <span class="at">fill =</span> Count)) <span class="sc">+</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span>  <span class="co"># Creates a grid-based heatmap</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> Count), <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">size =</span> <span class="dv">6</span>) <span class="sc">+</span>  <span class="co"># Add count values to each cell</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"lightblue"</span>, <span class="at">high =</span> <span class="st">"blue"</span>) <span class="sc">+</span>  <span class="co"># Use a color gradient for better visualization</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Confusion Matrix for kNN Classification"</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Predicted Label"</span>, <span class="at">y =</span> <span class="st">"True Label"</span>, <span class="at">fill =</span> <span class="st">"Count"</span>) <span class="sc">+</span>  <span class="co"># Customize labels</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()  <span class="co"># Apply a clean, minimal theme</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Car_Evaluation_Analysis_files/figure-html/cell-14-output-1.png" width="600" height="360" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Figure 2: Heatmap of Confusion Matrix for Visualization of Analysis</strong></p>
+</section>
+</section>
+</section>
+<section id="discussion" class="level2">
+<h2 class="anchored" data-anchor-id="discussion"><strong>Discussion</strong></h2>
+<section id="what-we-found" class="level3">
+<h3 class="anchored" data-anchor-id="what-we-found">What We Found</h3>
+<p>The analysis started with a car evaluation dataset lacking column names, which were manually assigned as “buying,” “maint,” “doors,” “persons,” “lug_boot,” “safety,” and “class” based on UCI documentation. The dataset, comprising 1,728 rows, was clean with no missing values or duplicates. All variables were categorical and ordinal, necessitating ordinal encoding into numerical values for k-Nearest Neighbors (kNN) analysis. Summary statistics revealed balanced distributions across most features (e.g., “buying,” “maint,” “doors,” “lug_boot,” “safety,” and “persons”), with each category appearing 432 or 576 times. However, the “class” variable was highly imbalanced, with “unacc” dominating (1,210 instances) and “vgood” rare (65 instances), though this was irrelevant as “class” was not used in the kNN analysis.</p>
+<p>Exploratory Data Analysis (EDA) using histograms showed that “safety” levels (low, medium, high) were evenly distributed across “buying,” “persons,” and “maint,” indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict “safety” using other features, achieved a final accuracy of 46.96% with an optimal k of 17, surpassing random guessing (33.3% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.</p>
+<p>The dataset’s cleanliness and balanced feature distributions partially aligned with expectations, given its UCI origin, known for structured datasets. The absence of missing values and duplicates was anticipated, simplifying preprocessing. However, the uniform distribution of “safety” across individual features was unexpected. Real-world data might show biases—e.g., higher safety with lower buying prices or higher maintenance costs due to safety features—yet this dataset lacked such trends, possibly indicating synthetic balancing for algorithmic testing.</p>
+<p>The kNN accuracy of 46.96% was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase from 47.22% to 46.09% with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.</p>
+</section>
+<section id="potential-impact" class="level3">
+<h3 class="anchored" data-anchor-id="potential-impact">Potential Impact</h3>
+<p>These results have practical and methodological implications. The preprocessing and encoding workflow offers a replicable approach for handling ordinal categorical data, applicable to fields like healthcare or marketing. The balanced predictors ensure unbiased model training, making this dataset a fair benchmark for algorithmic evaluation.</p>
+<p>However, the kNN’s 46.09% accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.</p>
+</section>
+<section id="future-questions" class="level3">
+<h3 class="anchored" data-anchor-id="future-questions">Future Questions</h3>
+<p>The analysis raises several questions for further exploration each aiming to enhance its practical and analytical value:</p>
+<ol type="1">
+<li><p><strong>Incorporating Additional Car Attributes</strong>: Could adding car-specific variables—like crash test scores, manufacturing year, or brand reputation—enhance safety predictions? Expanding the dataset with real-world metrics, such as fuel efficiency, engine type (e.g., electric vs.&nbsp;gasoline), or historical recall data, might improve its utility for buyers or manufacturers. For instance, integrating standardized safety ratings (e.g., IIHS or NHTSA scores) could boost model accuracy beyond 46.96%, while manufacturing year might highlight safety evolution, and brand reputation could reflect quality consistency. This could transform the dataset into a robust tool for practical car evaluation.</p></li>
+<li><p><strong>Consumer Preferences and Safety Trade-offs</strong>: How do car features like buying price or maintenance cost influence consumer perceptions of safety versus affordability? Survey data or X post analysis could reveal if buyers prioritize low-cost options over safety, guiding how manufacturers balance these factors in car design.</p></li>
+<li><p><strong>Environmental Impact on Car Safety</strong>: Could environmental factors, such as typical driving conditions (urban vs.&nbsp;rural) or climate (e.g., snowy regions), affect safety ratings in this dataset? Linking car attributes to usage contexts might show if features like luggage boot size or door count adapt to safety needs in diverse settings.</p></li>
+<li><p><strong>Temporal Dynamics of Car Evaluation</strong>: How would safety predictions change if the dataset tracked cars over time, such as pre- and post-safety regulation changes? A longitudinal approach could assess if older cars with fewer doors or lower safety ratings become outliers as standards evolve.</p></li>
+<li><p><strong>Cross-Cultural Car Evaluation</strong>: Do safety priorities differ across regions (e.g., North America vs.&nbsp;Europe vs.&nbsp;Asia), and how might this dataset adapt? Incorporating regional safety standards or car preferences (e.g., compact cars in Europe) could test its global applicability, revealing cultural influences on car evaluation.</p></li>
+<li><p><strong>Feature Interactions in Car Evaluation</strong>: Could combining car features like buying price and maintenance cost reveal stronger predictors of safety ratings? Exploring interaction terms (e.g., high buying price with low maintenance) might uncover patterns that influence car safety assessments more effectively, such as whether cost trade-offs correlate with safety compromises.</p></li>
+<li><p><strong>Alternative Models for Car Safety Prediction</strong>: Would advanced models like random forests or neural networks outperform kNN by identifying critical car features—like luggage boot size or passenger capacity—for safety prediction? These could reveal non-linear relationships, such as how larger boot sizes might indicate family-oriented designs with higher safety standards.</p></li>
+</ol>
+<p>In conclusion, this study establishes a foundation for analyzing categorical datasets with kNN, while highlighting limitations and inspiring future research into feature engineering, model selection, and practical applicability in car evaluation contexts.</p>
+</section>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references"><strong>References</strong></h2>
+<ul>
+<li><p>Andersson, H. (2008). Willingness to pay for car safety: evidence from Sweden. Environmental and Resource Economics, 41, 579-594.</p></li>
+<li><p>Nygren, Å. (1983). Injuries to car occupants—Some aspects of the interior safety of cars: A study of a five-year material from an insurance company. Acta Oto-Laryngologica, 95(sup395), 1-135.</p></li>
+<li><p>Richter, M., Pape, H. C., Otte, D., &amp; Krettek, C. (2005). Improvements in passive car safety led to decreased injury severity–a comparison between the 1970s and 1990s. Injury, 36(4), 484-488.</p></li>
+<li><p>Wood, D. P. (1997). Safety and the car size effect: A fundamental explanation. Accident Analysis &amp; Prevention, 29(2), 139-151.</p></li>
+<li><p>Wikipedia Contributors. (2019, March 21). Motor vehicle fatality rate in U.S. by year. Wikipedia; Wikimedia Foundation. https://en.wikipedia.org/wiki/Motor_vehicle_fatality_rate_in_U.S._by_year</p></li>
+<li><p>UCI Machine Learning Repository. (1988). Car evaluation. https://archive.ics.uci.edu/dataset/19/car+evaluation</p></li>
+</ul>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
