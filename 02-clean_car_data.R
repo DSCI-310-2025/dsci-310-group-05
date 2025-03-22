@@ -65,6 +65,14 @@ car_data_clean <- car_data %>%
   mutate(across(-safety, encode_levels)) %>%
   mutate(safety = encode_safety(safety))
 
+# Ensure the "data/clean/" directory exists before saving the file
+output_file <- "data/clean/car_clean.csv"  # Define output file path
+output_dir <- dirname(output_file)  # Extract directory path
+
+if (!dir.exists(output_dir)) {
+  dir.create(output_dir, recursive = TRUE)  # Create directory if it doesn't exist
+}
+
 # Save cleaned dataset
 write.csv(car_data_clean, opt$output_file, row.names = FALSE)
 

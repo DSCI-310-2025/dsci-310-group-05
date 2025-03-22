@@ -122,13 +122,13 @@ div.csl-indent {
 <section id="summary" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.1</span> <strong>Summary</strong></h2>
 <p>This project analyzes the <strong>Car Evaluation Dataset</strong> from <span class="citation" data-cites="UCI1988">UCI Machine Learning Repository (<a href="#ref-UCI1988" role="doc-biblioref">1988</a>)</span>, which contains 1728 with <strong>six categorical attributes: buying price</strong>, maintenance cost, number of doors, passenger capacity, luggage space, and safety rating. The dataset was clean, with no missing values or duplicates, and required <strong>ordinal encoding</strong> for machine learning analysis.</p>
-<p>Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the “class” variable was highly imbalanced, with “unacceptable” accounting for <strong>1,210 instances</strong> and “very good” only <strong>65 instances</strong>. The k-Nearest Neighbors (kNN) model was trained to predict <strong>safety levels</strong> using the other features, achieving an accuracy of 50.72 with an optimal 15—an improvement over random guessing (33.33) but highlighting the model’s limited predictive power.</p>
+<p>Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the “class” variable was highly imbalanced, with “unacceptable” accounting for 1210 instances and “very good” only 65 instances. The k-Nearest Neighbors (kNN) model was trained to predict <strong>safety levels</strong> using the other features, achieving an accuracy of 44.06% with an optimal k of 19—an improvement over random guessing (33.33%) but highlighting the model’s limited predictive power.</p>
 <p>The findings indicate that individual features do not strongly determine safety levels independently, suggesting the need for more complex models or additional variables. These results have implications for both vehicle safety assessment and methodological best practices in categorical data analysis, reinforcing the importance of feature selection and encoding techniques for machine learning applications.</p>
 </section>
 <section id="introduction" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1.2</span> <strong>Introduction</strong></h2>
 <p>###<strong>Background</strong>:</p>
-<p>Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people’s daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40,000 fatalities (<span class="citation" data-cites="Wikipedia2019">Wikipedia Contributors (<a href="#ref-Wikipedia2019" role="doc-biblioref">2019</a>)</span>). Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.</p>
+<p>Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people’s daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40 000 fatailities (<span class="citation" data-cites="Wikipedia2019">Wikipedia Contributors (<a href="#ref-Wikipedia2019" role="doc-biblioref">2019</a>)</span>). Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.</p>
 <p>Research has shown that consumers are willing to invest in vehicle safety. For example, <span class="citation" data-cites="Andersson2008">Andersson (<a href="#ref-Andersson2008" role="doc-biblioref">2008</a>)</span> found that Swedish drivers were willing to pay a premium for improved car design and build quality to reduce the risk of injury in accidents. Additionally, design and material choices play a critical role in determining a vehicle’s safety. <span class="citation" data-cites="Nygren1983">Nygren (<a href="#ref-Nygren1983" role="doc-biblioref">1983</a>)</span> found that factors such as a car’s weight, seatbelt design, and headrests significantly influenced accident survivability. More recently, <span class="citation" data-cites="Richter2005">Richter et al. (<a href="#ref-Richter2005" role="doc-biblioref">2005</a>)</span> demonstrated that passive safety improvements—such as enhanced structural integrity and interior design modifications—have contributed to a measurable decline in injury rates from car accidents. These findings highlight the importance of identifying key factors that contribute to vehicle safety.</p>
 <p>Given this context, our research project aims to answer the following question:</p>
 <p><strong>Can we predict the estimated safety of a car using various attributes, such as its buying price, capacity (persons), and maintenance cost?</strong></p>
@@ -270,7 +270,21 @@ Table&nbsp;6: Unique Occurrences Count
  8 class        4    65
  9 doors        2   432
 10 doors        3   432
-# ℹ 15 more rows</code></pre>
+11 doors        4   432
+12 doors        5   432
+13 lug_boot     1   576
+14 lug_boot     2   576
+15 lug_boot     3   576
+16 maint        1   432
+17 maint        2   432
+18 maint        3   432
+19 maint        4   432
+20 persons      2   576
+21 persons      4   576
+22 persons      5   576
+23 safety       1   576
+24 safety       2   576
+25 safety       3   576</code></pre>
 </div>
 </div>
 </figure>
@@ -344,7 +358,7 @@ Figure&nbsp;3: Distribution of Maintenance Cost by Safety Level
 <pre><code>Test Set Accuracy: 46.09 %</code></pre>
 </div>
 </div>
-<p>The final kNN model achieved 46.09 accuracy, which is somewhat reflective of the CV accuracy of 47.22. This is not a great accuracy, but it’s better than random guessing, which would be 33.33</p>
+<p>The final kNN model achieved 46.09% accuracy, which is somewhat reflective of the CV accuracy of 47.22%. This is not a great accuracy, but it’s better than random guessing, which would be 33.33%.</p>
 </section>
 <section id="visualization-of-analysis" class="level3" data-number="1.3.7">
 <h3 data-number="1.3.7" class="anchored" data-anchor-id="visualization-of-analysis"><span class="header-section-number">1.3.7</span> <strong>Visualization of Analysis</strong></h3>
@@ -371,14 +385,14 @@ Figure&nbsp;4: Confusion Matrix to Evaluate Model Performance
 <section id="what-we-found" class="level3" data-number="1.4.1">
 <h3 data-number="1.4.1" class="anchored" data-anchor-id="what-we-found"><span class="header-section-number">1.4.1</span> <strong>What We Found</strong></h3>
 <p>The analysis started with a car evaluation dataset lacking column names, which were manually assigned as “buying,” “maint,” “doors,” “persons,” “lug_boot,” “safety,” and “class” based on UCI documentation. The dataset, comprising 1728 rows, was clean with no missing values or duplicates. All variables were categorical and ordinal, necessitating ordinal encoding into numerical values for k-Nearest Neighbors (kNN) analysis. Summary statistics revealed balanced distributions across most features (e.g., “buying,” “maint,” “doors,” “lug_boot,” “safety,” and “persons”), with each category appearing 432 or 576 times. However, the “class” variable was highly imbalanced, with “unacc” dominating (1210 instances) and “vgood” rare (65 instances), though this was irrelevant as “class” was not used in the kNN analysis.</p>
-<p>Exploratory Data Analysis (EDA) using histograms showed that “safety” levels (low, medium, high) were evenly distributed across “buying,” “persons,” and “maint,” indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict “safety” using other features, achieved a final accuracy of 46.09 with an optimal k of 17, surpassing random guessing (33.33 for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.</p>
+<p>Exploratory Data Analysis (EDA) using histograms showed that “safety” levels (low, medium, high) were evenly distributed across “buying,” “persons,” and “maint,” indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict “safety” using other features, achieved a final accuracy of 46.09% with an optimal k of 17, surpassing random guessing (33.33% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.</p>
 <p>The dataset’s cleanliness and balanced feature distributions partially aligned with expectations, given its UCI origin, known for structured datasets. The absence of missing values and duplicates was anticipated, simplifying preprocessing. However, the uniform distribution of “safety” across individual features was unexpected. Real-world data might show biases—e.g., higher safety with lower buying prices or higher maintenance costs due to safety features—yet this dataset lacked such trends, possibly indicating synthetic balancing for algorithmic testing.</p>
-<p>The kNN accuracy of 46.09 was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase to 47.22 from 46.09 with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.</p>
+<p>The kNN accuracy of 46.09% was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase to 47.22% from 46.09% with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.</p>
 </section>
 <section id="potential-impact" class="level3" data-number="1.4.2">
 <h3 data-number="1.4.2" class="anchored" data-anchor-id="potential-impact"><span class="header-section-number">1.4.2</span> <strong>Potential Impact</strong></h3>
 <p>These results have practical and methodological implications. The preprocessing and encoding workflow offers a replicable approach for handling ordinal categorical data, applicable to fields like healthcare or marketing. The balanced predictors ensure unbiased model training, making this dataset a fair benchmark for algorithmic evaluation.</p>
-<p>However, the kNN’s 46.09 accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.</p>
+<p>However, the kNN’s 46.09% accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.</p>
 </section>
 <section id="future-questions" class="level3" data-number="1.4.3">
 <h3 data-number="1.4.3" class="anchored" data-anchor-id="future-questions"><span class="header-section-number">1.4.3</span> <strong>Future Questions</strong></h3>
