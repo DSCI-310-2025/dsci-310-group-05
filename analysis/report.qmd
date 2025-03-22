@@ -16,7 +16,7 @@ execute:
 
 # **Car Evaluation Analysis**
 
-```{r, echo=FALSE, output=FALSE}
+```{r setup, include=FALSE}
 # First, we will load the required libraries necessary to perform data wrangling, visualization, and analysis.
 library(ggplot2) # Contains dplyr, ggplot2, and other libraries to perform data cleaning and visualization.
 library(dplyr)
@@ -28,20 +28,8 @@ library(tidyr)
 url <- "https://archive.ics.uci.edu/ml/machine-learning-databases/car/car.data"
 car_data <- read.csv(url, header = FALSE, stringsAsFactors = TRUE) # since all input variables are categorical, we set the data type to a factor.
 
-# Display first few rows
-head(car_data)
-
 # Assigning the column names
 colnames(car_data) <- c("buying", "maint", "doors", "persons", "lug_boot", "safety", "class")
-head(car_data)
-
-# Checking for missing values:
-df <- data.frame(
-  Label = c("Number of Missing Values", "Number of Duplicate Values"),
-  Value = c(sum(is.na(car_data), 0)
-))
-# Every variable in this dataset is an ordinal variable - it falls under the categorical variables that have a natural relationship or hierarchy to them.
-# We can use ordinal encoding to transform these factor variables into double so kNN can be used on them. Scaling is NOT needed here.
 
 # Define encoding function for all categorical features 
 encode_levels <- function(x) {
@@ -80,11 +68,8 @@ car_data_encoded <- car_data %>%
   mutate(across(-safety, encode_levels)) %>%
   mutate(safety = encode_safety(safety))  # Encode safety
 
-# Display first few rows
-head(car_data_encoded)
-
 # Count occurrences for each unique value in each column
-car_data_encoded %>%
+car_data_summary <- car_data_encoded %>%
   pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
   group_by(Variable, Value) %>%
   summarise(Count = n(), .groups = "drop") %>%
@@ -95,21 +80,22 @@ car_data_prepared <- car_data_encoded %>%
   mutate(safety = as.factor(safety))  # The target variable must be a factor for classification models in R
 
 # Split the dataset into training (80%) and testing (20%) sets
-# This ensures that the model is trained on one portion of the data and tested on unseen data for evaluation
-train_index <- createDataPartition(car_data_prepared$safety, p = 0.8, list = FALSE)  # Randomly select 80% of data for training
-train_data <- car_data_prepared[train_index, ]  # Training data
-test_data <- car_data_prepared[-train_index, ]  # Testing data
+set.seed(123)  # Ensure reproducibility
+train_index <- createDataPartition(car_data_prepared$safety, p = 0.8, list = FALSE)
+train_data <- car_data_prepared[train_index, ]
+test_data <- car_data_prepared[-train_index, ]
 
 # Separate features and target variable
-train_x <- train_data %>% select(-safety)  # Predictor variables
-train_y <- train_data$safety               # Target variable
+train_x <- train_data %>% select(-safety)
+train_y <- train_data$safety
 test_x <- test_data %>% select(-safety)
 test_y <- test_data$safety
 
+# Define k values to test (odd values to prevent ties)
 k_values <- seq(1, 21, 2)
 
 # Store cross-validation results
-cv_results <- data.frame(k = integer(), accuracy = numeric())  
+cv_results <- data.frame(k = integer(), accuracy = numeric())
 
 # Perform cross-validation for each k value
 for (k in k_values) {
@@ -127,10 +113,7 @@ for (k in k_values) {
 
 # Best k based on cross-validation accuracy
 best_k <- cv_results$k[which.max(cv_results$accuracy)]
-best_cv_accuracy <- round(max(cv_results$accuracy)*100, 2)  # Best cross-validation accuracy
-
-cat("Best k found through cross-validation:", best_k, "\n")
-cat("Best cross-validation accuracy:", best_cv_accuracy, "%\n")
+best_cv_accuracy <- round(max(cv_results$accuracy)*100, 2)
 
 # Train the final model with the best k
 final_knn_model <- train(
@@ -145,43 +128,55 @@ predictions <- predict(final_knn_model, test_x)
 # Compute test accuracy
 test_accuracy <- round(sum(predictions == test_y) / length(test_y)*100, 2)
 
-cat("Test Set Accuracy:", test_accuracy, "%\n")
+# Calculate random guess accuracy
+rand <- round((max(car_data_summary[car_data_summary$Variable == "safety", "Count"])/nrow(car_data))*100, 2)
 
-car_data_summary <- car_data_encoded %>%
-  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
-  group_by(Variable, Value) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  arrange(Variable, desc(Count))
+# Convert encoded variables back to their categorical labels for plotting
+car_data_labeled <- car_data_encoded %>%
+  mutate(
+    buying = factor(buying, levels = c(1, 2, 3, 4), labels = c("low", "med", "high", "vhigh")),
+    maint = factor(maint, levels = c(1, 2, 3, 4), labels = c("low", "med", "high", "vhigh")),
+    persons = factor(persons, levels = c(2, 4, 5), labels = c("2", "4", "5+")), 
+    class = factor(class, levels = c(1, 2, 3, 4), labels = c("unacc", "acc", "good", "vgood")),
+    safety = as.factor(safety)  # Keep safety as a factor for color coding
+  )
 
-print(car_data_summary)
+# Define a larger theme for all plots
+larger_theme <- theme(
+  plot.title = element_text(size = 18, face = "bold"),
+  axis.title = element_text(size = 16),
+  axis.text = element_text(size = 14),
+  legend.title = element_text(size = 14),
+  legend.text = element_text(size = 12)
+)
 
-rand <- round((max(car_data_summary[23, "Count"],
-            car_data_summary[24, "Count"],
-            car_data_summary[25, "Count"])/nrow(car_data))*100, 2)
-
+# Compute confusion matrix
+conf_matrix <- confusionMatrix(predictions, test_y)
+conf_matrix_df <- as.data.frame(conf_matrix$table)
+colnames(conf_matrix_df) <- c("True_Label", "Predicted_Label", "Count")
 ```
 
 ## **Summary**
 
-This project analyzes the **Car Evaluation Dataset** from @UCI1988, which contains `r nrow(car_data)` with **six categorical attributes: buying price**, maintenance cost, number of doors, passenger capacity, luggage space, and safety rating. The dataset was clean, with no missing values or duplicates, and required **ordinal encoding** for machine learning analysis.
+This project analyzes the **Car Evaluation Dataset** from @UCI1988, which contains `r nrow(car_data)` rows with **six categorical attributes: buying price**, maintenance cost, number of doors, passenger capacity, luggage space, and safety rating. The dataset was clean, with no missing values or duplicates, and required **ordinal encoding** for machine learning analysis.
 
-Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the "class" variable was highly imbalanced, with "unacceptable" accounting for `r car_data_summary[5, "Count"]` instances and "very good" only `r car_data_summary[8, "Count"]` instances. The k-Nearest Neighbors (kNN) model was trained to predict **safety levels** using the other features, achieving an accuracy of `r test_accuracy`% with an optimal k of `r best_k`—an improvement over random guessing (`r rand`%) but highlighting the model's limited predictive power.
+Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the "class" variable was highly imbalanced, with "unacceptable" accounting for `r car_data_summary[car_data_summary$Variable == "class" & car_data_summary$Value == 1, "Count"]` instances and "very good" only `r car_data_summary[car_data_summary$Variable == "class" & car_data_summary$Value == 4, "Count"]` instances. The k-Nearest Neighbors (kNN) model was trained to predict **safety levels** using the other features, achieving an accuracy of `r test_accuracy`% with an optimal k of `r best_k`—an improvement over random guessing (`r rand`%) but highlighting the model's limited predictive power.
 
 The findings indicate that individual features do not strongly determine safety levels independently, suggesting the need for more complex models or additional variables. These results have implications for both vehicle safety assessment and methodological best practices in categorical data analysis, reinforcing the importance of feature selection and encoding techniques for machine learning applications.
 
 ## **Introduction**
 
-###**Background**:
+### **Background**:
 
-Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people's daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40 000 fatailities (@Wikipedia2019). Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.
+Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people's daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40,000 fatalities @Wikipedia2019. Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.
 
-Research has shown that consumers are willing to invest in vehicle safety. For example, @Andersson2008 found that Swedish drivers were willing to pay a premium for improved car design and build quality to reduce the risk of injury in accidents. Additionally, design and material choices play a critical role in determining a vehicle's safety. @Nygren1983 found that factors such as a car’s weight, seatbelt design, and headrests significantly influenced accident survivability. More recently, @Richter2005 demonstrated that passive safety improvements—such as enhanced structural integrity and interior design modifications—have contributed to a measurable decline in injury rates from car accidents. These findings highlight the importance of identifying key factors that contribute to vehicle safety.
+Research has shown that consumers are willing to invest in vehicle safety. For example, @Andersson2008 found that Swedish drivers were willing to pay a premium for improved car design and build quality to reduce the risk of injury in accidents. Additionally, design and material choices play a critical role in determining a vehicle's safety. @Nygren1983 found that factors such as a car's weight, seatbelt design, and headrests significantly influenced accident survivability. More recently, @Richter2005 demonstrated that passive safety improvements—such as enhanced structural integrity and interior design modifications—have contributed to a measurable decline in injury rates from car accidents. These findings highlight the importance of identifying key factors that contribute to vehicle safety.
 
 Given this context, our research project aims to answer the following question:
 
 **Can we predict the estimated safety of a car using various attributes, such as its buying price, capacity (persons), and maintenance cost?**
 
-To answer this question, we will use the Car Evaluation Dataset from UC Irvine’s Machine Learning Repository. This multivariate classification dataset contains six car design and classification variables, and includes `r nrow(car_data)` observations. Key variables that will be central to our analysis include the car’s buying price, maintenance cost, seating capacity (in terms of the number of passengers it can accommodate), and the car’s evaluation level (categorized as unacceptable, acceptable, good, or very good).
+To answer this question, we will use the Car Evaluation Dataset from UC Irvine's Machine Learning Repository. This multivariate classification dataset contains six car design and classification variables, and includes `r nrow(car_data)` observations. Key variables that will be central to our analysis include the car's buying price, maintenance cost, seating capacity (in terms of the number of passengers it can accommodate), and the car's evaluation level (categorized as unacceptable, acceptable, good, or very good).
 
 ## **Methods and Results**
 
@@ -189,109 +184,55 @@ To answer this question, we will use the Car Evaluation Dataset from UC Irvine�
 
 The dataset was retrieved from an online source and loaded into R for analysis using the read.csv function. This dataset contains categorical variables describing various attributes of cars, which will be used for classification.
 
-```{r, echo=FALSE, output=FALSE}
-# First, we will load the required libraries necessary to perform data wrangling, visualization, and analysis.
-library(ggplot2) # Contains dplyr, ggplot2, and other libraries to perform data cleaning and visualization.
-library(dplyr)
-library(class) # For the kNN Classifier.
-library(caret) # For train-test-split and cross-validation.
-library(tidyr)
-```
-
-```{r, echo=FALSE}
+```{r}
 #| label: tbl-data
-#| tbl-cap: "Data-Preview"
-# Loading the dataset from the web
-url <- "https://archive.ics.uci.edu/ml/machine-learning-databases/car/car.data"
-car_data <- read.csv(url, header = FALSE, stringsAsFactors = TRUE) # since all input variables are categorical, we set the data type to a factor.
+#| tbl-cap: "Data Preview"
 
 # Display first few rows
 head(car_data)
 ```
 
-Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation. @tbl-col
+Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation as shown in @tbl-col.
 
-```{r, echo=FALSE}
+```{r}
 #| label: tbl-col
 #| tbl-cap: "Assigning the column names"
-# Assigning the column names
-colnames(car_data) <- c("buying", "maint", "doors", "persons", "lug_boot", "safety", "class")
+
+# Display with column names
 head(car_data)
 ```
 
 ### **Data Wrangling and Cleaning**
 
-```{r, echo=FALSE}
+```{r}
 #| label: tbl-nan
 #| tbl-cap: "Count of Missing and Duplicate Values"
 
-# Checking for missing values:
+# Create data frame for missing values display
 df <- data.frame(
   Label = c("Number of Missing Values", "Number of Duplicate Values"),
-  Value = c(sum(is.na(car_data), 0)
-))
+  Value = c(sum(is.na(car_data)), 0)
+)
 
 # Print the table
 df
 ```
 
-Amazing! No missing values and duplicate rows. @tbl-nan
+As shown in @tbl-nan, there are no missing values or duplicate rows in our dataset.
 
 ### **Data Types**
 
-Since k-Nearest Neighbors (kNN) is a distance-based algorithm, it requires numerical input for feature comparisons. However, our dataset currently consists of categorical variables (all factors in R).
+Since k-Nearest Neighbors (kNN) is a distance-based algorithm, it requires numerical input for feature comparisons. However, our dataset consists of categorical variables (all factors in R).
 
-```{r, echo=FALSE}
-# Every variable in this dataset is an ordinal variable - it falls under the categorical variables that have a natural relationship or hierarchy to them.
-# We can use ordinal encoding to transform these factor variables into double so kNN can be used on them. Scaling is NOT needed here.
-
-# Define encoding function for all categorical features (
-encode_levels <- function(x) {
-  case_when(
-    x == "vhigh"  ~ 4,   
-    x == "high"   ~ 3,
-    x == "med"    ~ 2, 
-    x == "low"    ~ 1,
-    x == "big"    ~ 3,
-    x == "small"  ~ 1,
-    x == "more"   ~ 5,   # 'more' in persons column treated as 5
-    x == "5more"  ~ 5,   # '5more' in doors column treated as 5
-    x == "2"      ~ 2,
-    x == "3"      ~ 3,
-    x == "4"      ~ 4,
-    x == "unacc"  ~ 1,
-    x == "acc"    ~ 2,
-    x == "good"   ~ 3,
-    x == "vgood"  ~ 4,
-    TRUE          ~ as.numeric(x) # Default conversion for numbers
-  )
-}
-
-# Encoding safety separately to avoid duplicate "low", "med", "high"
-encode_safety <- function(x) {
-  case_when(
-    x == "low"  ~ 1,
-    x == "med"  ~ 2,
-    x == "high" ~ 3,
-    TRUE        ~ as.numeric(x)
-  )
-}
-
-# Apply encoding to all columns, including safety separately
-car_data_encoded <- car_data %>%
-  mutate(across(-safety, encode_levels)) %>%
-  mutate(safety = encode_safety(safety))  # Encode safety
-```
-
-```{r, echo=FALSE}
+```{r}
 #| label: tbl-enc
 #| tbl-cap: "Car Data Encoded"
 
-# Display first few rows
+# Display first few rows of encoded data
 head(car_data_encoded)
 ```
 
-**Since we converted the text into numerical variables, we have attached the description of each numerical value per feature below for reference:**
+@tbl-enc shows the transformed dataset after ordinal encoding. Here's the meaning of each numerical value:
 
 **`buying` and `maint`** - low: 1 - med: 2 - high: 3 - vhigh: 4
 
@@ -305,63 +246,33 @@ head(car_data_encoded)
 
 ### **Summary of Data**
 
-```{r, echo=FALSE}
+```{r}
 #| label: tbl-sum
 #| tbl-cap: "Summary Statistics"
+
 summary(car_data_encoded)
 ```
 
-```{r, echo=FALSE}
+```{r}
 #| label: tbl-cnt
 #| tbl-cap: "Unique Occurrences Count"
-# Count occurrences for each unique value in each column
-car_data_summary <- car_data_encoded %>%
-  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
-  group_by(Variable, Value) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  arrange(Variable, desc(Count))
 
+# Print summary of occurrences
 print(car_data_summary, n = Inf)
 ```
 
-@tbl-cnt provides a clearer picture of the dataset's distribution across categorical variables. The `buying`, `maint`, and `doors` features all have an even distribution, with each level appearing `r car_data_summary[1, "Count"]` times, suggesting a balanced dataset for these features. The `safety`, `lug_boot` and `persons` features are also evenly distributed across its three levels, with `r car_data_summary[13, "Count"]` occurrences each, ensuring no significant class imbalance in this variable. However, the `class` is highly imbalanced, with "unacc" (encoded as 1) making up the majority (`r car_data_summary[5, "Count"]` occurrences), while "vgood" (encoded as 4) is rare (only `r car_data_summary[8, "Count"]` occurrences). Since we are not using the `class` variable in our analysis, this is not much of a concern.
+@tbl-cnt provides a clearer picture of the dataset's distribution across categorical variables. The `buying`, `maint`, and `doors` features all have an even distribution, with each level appearing `r car_data_summary[1, "Count"]` times, suggesting a balanced dataset for these features. The `safety`, `lug_boot` and `persons` features are also evenly distributed across its three levels, with `r car_data_summary[car_data_summary$Variable == "safety" & car_data_summary$Value == 1, "Count"]` occurrences each, ensuring no significant class imbalance in this variable. However, the `class` is highly imbalanced, with "unacc" (encoded as 1) making up the majority (`r car_data_summary[car_data_summary$Variable == "class" & car_data_summary$Value == 1, "Count"]` occurrences), while "vgood" (encoded as 4) is rare (only `r car_data_summary[car_data_summary$Variable == "class" & car_data_summary$Value == 4, "Count"]` occurrences). Since we are not using the `class` variable in our analysis, this is not much of a concern.
 
 **Our x and y variables all have sufficient data points for analysis!**
 
 ### **EDA Analysis - Visualization**
 
-```{r, echo=FALSE}
-# Convert encoded variables back to their categorical labels
-# Bar plot of safety distribution
-#| label: fig-saf
-#| fig-cap: "BarPlot of Safety Distribution"
-car_data_labeled <- car_data_encoded %>%
-  mutate(
-    buying = factor(buying, levels = c(1, 2, 3, 4), labels = c("low", "med", "high", "vhigh")),
-    maint = factor(maint, levels = c(1, 2, 3, 4), labels = c("low", "med", "high", "vhigh")),
-    persons = factor(persons, levels = c(2, 4, 5), labels = c("2", "4", "5+")), 
-    class = factor(class, levels = c(1, 2, 3, 4), labels = c("unacc", "acc", "good", "vgood")),
-    safety = as.factor(safety)  # Keep safety as a factor for color coding
-  )
-```
-
-```{r, echo=FALSE}
-# Define a larger theme for all plots
-larger_theme <- theme(
-  plot.title = element_text(size = 18, face = "bold"), # Larger title
-  axis.title = element_text(size = 16),  # Larger axis labels
-  axis.text = element_text(size = 14),  # Larger axis values
-  legend.title = element_text(size = 14),  # Larger legend title
-  legend.text = element_text(size = 12)  # Larger legend values
-)
-
-# Increase figure size, default size is not very readable
-options(repr.plot.width = 10, repr.plot.height = 6)
-```
-
-```{r, echo=FALSE}
+```{r}
 #| label: fig-buy
 #| fig-cap: "Distribution of Buying Price by Safety Level"
+#| fig-width: 8
+#| fig-height: 5
+
 # Plot 1: Distribution of Buying Price by Safety Level
 ggplot(car_data_labeled, aes(x = buying, fill = safety)) +
   geom_bar(position = "dodge") +
@@ -370,9 +281,12 @@ ggplot(car_data_labeled, aes(x = buying, fill = safety)) +
   theme_minimal() + larger_theme
 ```
 
-```{r, echo=FALSE}
+```{r}
 #| label: fig-num
 #| fig-cap: "Distribution of Number of Persons by Safety Level"
+#| fig-width: 8
+#| fig-height: 5
+
 # Plot 2: Distribution of Number of Persons by Safety Level
 ggplot(car_data_labeled, aes(x = persons, fill = safety)) +
   geom_bar(position = "dodge") +
@@ -381,25 +295,27 @@ ggplot(car_data_labeled, aes(x = persons, fill = safety)) +
   theme_minimal() + larger_theme
 ```
 
-```{r, echo=FALSE}
+```{r}
 #| label: fig-main
 #| fig-cap: "Distribution of Maintenance Cost by Safety Level"
+#| fig-width: 8
+#| fig-height: 5
+
 # Plot 3: Distribution of Maintenance Cost by Safety Level
 ggplot(car_data_labeled, aes(x = maint, fill = safety)) +
   geom_bar(position = "dodge") +
   labs(title = "Distribution of Maintenance Cost by Safety Level",
        x = "Maintenance Cost", y = "Count", fill = "Safety Level") +
   theme_minimal() + larger_theme
-
 ```
 
 **Histograms of Safety Across 3 Input Variables: Buying Price, Capacity (Number of Persons), and Maintenance Cost**
 
-As we saw in the summary table, all the safety levels are evenly distributed across each of the independent variables.
+As we can see in the figures, all the safety levels are evenly distributed across each of the independent variables.
 
 **Initial Observations**
 
-The histograms indicate that the safety levels (@fig-buy, @fig-num, and @fig-main) are evenly distributed across all three independent variables: buying price, number of persons, and maintenance cost. This suggests that the dataset is well-balanced with respect to safety levels, meaning that safety is not disproportionately concentrated in any particular category of these features. However, we do not observe significant variation is observed in the distribution of safety across these variables.
+The histograms indicate that the safety levels (@fig-buy, @fig-num, and @fig-main) are evenly distributed across all three independent variables: buying price, number of persons, and maintenance cost. This suggests that the dataset is well-balanced with respect to safety levels, meaning that safety is not disproportionately concentrated in any particular category of these features. However, we do not observe significant variation in the distribution of safety across these variables.
 
 **Proceeding with Analysis**
 
@@ -407,69 +323,12 @@ While individual variables may not show a strong distinction in safety levels on
 
 ### **kNN Classification Analysis**
 
-```{r, echo=FALSE}
-set.seed(123)  # We put this to ensure reproducibility in our data, since splitting into training and test splits will be random.
+```{r}
+#| output: false
 
-# Convert categorical variables to factors
-car_data_prepared <- car_data_encoded %>%
-  mutate(safety = as.factor(safety))  # The target variable must be a factor for classification models in R
-
-# Split the dataset into training (80%) and testing (20%) sets
-# This ensures that the model is trained on one portion of the data and tested on unseen data for evaluation
-train_index <- createDataPartition(car_data_prepared$safety, p = 0.8, list = FALSE)  # Randomly select 80% of data for training
-train_data <- car_data_prepared[train_index, ]  # Training data
-test_data <- car_data_prepared[-train_index, ]  # Testing data
-
-# Separate features and target variable
-train_x <- train_data %>% select(-safety)  # Predictor variables
-train_y <- train_data$safety               # Target variable
-test_x <- test_data %>% select(-safety)
-test_y <- test_data$safety
-```
-
-```{r, echo=FALSE}
-# Define k values to test (odd values to prevent ties)
-k_values <- seq(1, 21, 2)
-
-# Store cross-validation results
-cv_results <- data.frame(k = integer(), accuracy = numeric())  
-
-# Perform cross-validation for each k value
-for (k in k_values) {
-  set.seed(123)  # Ensure reproducibility in CV
-
-  knn_model <- train(
-    train_x, train_y, method = "knn",
-    trControl = trainControl(method = "cv", number = 5),  # 5-fold CV
-    tuneGrid = data.frame(k = k)
-  )
-
-  # Store cross-validation accuracy
-  cv_results <- rbind(cv_results, data.frame(k = k, accuracy = max(knn_model$results$Accuracy)))
-}
-
-# Best k based on cross-validation accuracy
-best_k <- cv_results$k[which.max(cv_results$accuracy)]
-best_cv_accuracy <- round(max(cv_results$accuracy)*100, 2)  # Best cross-validation accuracy
-
+# Cross-validation results (hidden from output)
 cat("Best k found through cross-validation:", best_k, "\n")
 cat("Best cross-validation accuracy:", best_cv_accuracy, "%\n")
-```
-
-```{r, echo=FALSE}
-# Train the final model with the best k
-final_knn_model <- train(
-  train_x, train_y, method = "knn",
-  trControl = trainControl(method = "none"),  # No CV, just final training
-  tuneGrid = data.frame(k = best_k)
-)
-
-# Generate predictions on the test set
-predictions <- predict(final_knn_model, test_x)
-
-# Compute test accuracy
-test_accuracy <- round(sum(predictions == test_y) / length(test_y)*100, 2)
-
 cat("Test Set Accuracy:", test_accuracy, "%\n")
 ```
 
@@ -477,21 +336,13 @@ The final kNN model achieved `r test_accuracy`% accuracy, which is somewhat refl
 
 ### **Visualization of Analysis**
 
-Since we are using multiple input variables for our kNN classification, it wouldn't be possible to graph it out 2D. We will do a **confusion matrix** as our visualization.
+Since we are using multiple input variables for our kNN classification, it wouldn't be possible to graph it out in 2D. We will use a **confusion matrix** as our visualization.
 
-```{r, echo=FALSE}
+```{r}
 #| label: fig-conf
 #| fig-cap: "Confusion Matrix to Evaluate Model Performance"
-# Generate the confusion matrix to evaluate model performance
-# This compares the predicted labels (final_knn) with the actual test labels (test_y)
-conf_matrix <- confusionMatrix(predictions, test_y)
-
-# Convert confusion matrix into a tidy format for plotting
-# The confusionMatrix function stores results in a table format, so we extract and reformat it
-conf_matrix_df <- as.data.frame(conf_matrix$table)
-
-# Rename columns for clarity (matching true and predicted values)
-colnames(conf_matrix_df) <- c("True_Label", "Predicted_Label", "Count")
+#| fig-width: 8
+#| fig-height: 6
 
 # Plot a heatmap to visualize classification performance
 ggplot(conf_matrix_df, aes(x = Predicted_Label, y = True_Label, fill = Count)) +
@@ -500,20 +351,20 @@ ggplot(conf_matrix_df, aes(x = Predicted_Label, y = True_Label, fill = Count)) +
   scale_fill_gradient(low = "lightblue", high = "blue") +  # Use a color gradient for better visualization
   labs(title = "Confusion Matrix for kNN Classification",
        x = "Predicted Label", y = "True Label", fill = "Count") +  # Customize labels
-  theme_minimal()  # Apply a clean, minimal theme
+  theme_minimal() + larger_theme  # Apply a clean, minimal theme
 ```
 
-**Heatmap of Confusion Matrix for Visualization of Analysis**
+@fig-conf shows the heatmap visualization of our confusion matrix for the kNN classification model.
 
 ## **Discussion**
 
 ### **What We Found**
 
-The analysis started with a car evaluation dataset lacking column names, which were manually assigned as "buying," "maint," "doors," "persons," "lug_boot," "safety," and "class" based on UCI documentation. The dataset, comprising `r nrow(car_data)` rows, was clean with no missing values or duplicates. All variables were categorical and ordinal, necessitating ordinal encoding into numerical values for k-Nearest Neighbors (kNN) analysis. Summary statistics revealed balanced distributions across most features (e.g., "buying," "maint," "doors," "lug_boot," "safety," and "persons"), with each category appearing `r car_data_summary[1, "Count"]` or `r car_data_summary[13, "Count"]` times. However, the "class" variable was highly imbalanced, with "unacc" dominating (`r car_data_summary[5, "Count"]` instances) and "vgood" rare (`r car_data_summary[8, "Count"]` instances), though this was irrelevant as "class" was not used in the kNN analysis.
+The analysis started with a car evaluation dataset lacking column names, which were manually assigned as "buying," "maint," "doors," "persons," "lug_boot," "safety," and "class" based on UCI documentation. The dataset, comprising `r nrow(car_data)` rows, was clean with no missing values or duplicates. All variables were categorical and ordinal, necessitating ordinal encoding into numerical values for k-Nearest Neighbors (kNN) analysis. Summary statistics revealed balanced distributions across most features (e.g., "buying," "maint," "doors," "lug_boot," "safety," and "persons"), with each category appearing `r car_data_summary[1, "Count"]` or `r car_data_summary[car_data_summary$Variable == "safety" & car_data_summary$Value == 1, "Count"]` times. However, the "class" variable was highly imbalanced, with "unacc" dominating (`r car_data_summary[car_data_summary$Variable == "class" & car_data_summary$Value == 1, "Count"]` instances) and "vgood" rare (`r car_data_summary[car_data_summary$Variable == "class" & car_data_summary$Value == 4, "Count"]` instances), though this was irrelevant as "class" was not used in the kNN analysis.
 
-Exploratory Data Analysis (EDA) using histograms showed that "safety" levels (low, medium, high) were evenly distributed across "buying," "persons," and "maint," indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict "safety" using other features, achieved a final accuracy of `r test_accuracy`% with an optimal k of `r best_k`, surpassing random guessing (`r rand`% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.
+Exploratory Data Analysis (EDA) using histograms as shown in @fig-buy, @fig-num, and @fig-main revealed that "safety" levels (low, medium, high) were evenly distributed across "buying," "persons," and "maint," indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict "safety" using other features, achieved a final accuracy of `r test_accuracy`% with an optimal k of `r best_k`, surpassing random guessing (`r rand`% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized in @fig-conf shows the model's performance, highlighting prediction accuracies and errors across safety levels.
 
-The dataset’s cleanliness and balanced feature distributions partially aligned with expectations, given its UCI origin, known for structured datasets. The absence of missing values and duplicates was anticipated, simplifying preprocessing. However, the uniform distribution of "safety" across individual features was unexpected. Real-world data might show biases—e.g., higher safety with lower buying prices or higher maintenance costs due to safety features—yet this dataset lacked such trends, possibly indicating synthetic balancing for algorithmic testing.
+The dataset's cleanliness and balanced feature distributions partially aligned with expectations, given its UCI origin, known for structured datasets. The absence of missing values and duplicates was anticipated, simplifying preprocessing. However, the uniform distribution of "safety" across individual features was unexpected. Real-world data might show biases—e.g., higher safety with lower buying prices or higher maintenance costs due to safety features—yet this dataset lacked such trends, possibly indicating synthetic balancing for algorithmic testing.
 
 The kNN accuracy of `r test_accuracy`% was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase to `r best_cv_accuracy`% from `r test_accuracy`% with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.
 
@@ -521,15 +372,15 @@ The kNN accuracy of `r test_accuracy`% was lower than ideal but not surprising. 
 
 These results have practical and methodological implications. The preprocessing and encoding workflow offers a replicable approach for handling ordinal categorical data, applicable to fields like healthcare or marketing. The balanced predictors ensure unbiased model training, making this dataset a fair benchmark for algorithmic evaluation.
 
-However, the kNN’s `r test_accuracy`% accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.
+However, the kNN's `r test_accuracy`% accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.
 
 ### **Future Questions**
 
 The analysis raises several questions for further exploration each aiming to enhance its practical and analytical value:
 
-1.  **Incorporating Additional Car Attributes**: Could adding car-specific variables—like crash test scores, manufacturing year, or brand reputation—enhance safety predictions? Expanding the dataset with real-world metrics, such as fuel efficiency, engine type (e.g., electric vs. gasoline), or historical recall data, might improve its utility for buyers or manufacturers. For instance, integrating standardized safety ratings (e.g., IIHS or NHTSA scores) could boost model accuracy beyond `r test_accuracy`, while manufacturing year might highlight safety evolution, and brand reputation could reflect quality consistency. This could transform the dataset into a robust tool for practical car evaluation.
+1.  **Incorporating Additional Car Attributes**: Could adding car-specific variables—like crash test scores, manufacturing year, or brand reputation—enhance safety predictions? Expanding the dataset with real-world metrics, such as fuel efficiency, engine type (e.g., electric vs. gasoline), or historical recall data, might improve its utility for buyers or manufacturers. For instance, integrating standardized safety ratings (e.g., IIHS or NHTSA scores) could boost model accuracy beyond `r test_accuracy`%, while manufacturing year might highlight safety evolution, and brand reputation could reflect quality consistency. This could transform the dataset into a robust tool for practical car evaluation.
 
-2.  **Consumer Preferences and Safety Trade-offs**: How do car features like buying price or maintenance cost influence consumer perceptions of safety versus affordability? Survey data or X post analysis could reveal if buyers prioritize low-cost options over safety, guiding how manufacturers balance these factors in car design.
+2.  **Consumer Preferences and Safety Trade-offs**: How do car features like buying price or maintenance cost influence consumer perceptions of safety versus affordability? Survey data or social media analysis could reveal if buyers prioritize low-cost options over safety, guiding how manufacturers balance these factors in car design.
 
 3.  **Environmental Impact on Car Safety**: Could environmental factors, such as typical driving conditions (urban vs. rural) or climate (e.g., snowy regions), affect safety ratings in this dataset? Linking car attributes to usage contexts might show if features like luggage boot size or door count adapt to safety needs in diverse settings.
 

@@ -53,7 +53,7 @@ div.csl-indent {
 <link href="report_files/libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="report_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="report_files/libs/bootstrap/bootstrap-973236bd072d72a04ee9cd82dcc9cb29.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="report_files/libs/bootstrap/bootstrap-8a79a254b8e706d3c925cde0a310d4f0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -96,7 +96,10 @@ div.csl-indent {
   <li><a href="#car-evaluation-analysis" id="toc-car-evaluation-analysis"><span class="header-section-number">1</span> <strong>Car Evaluation Analysis</strong></a>
   <ul>
   <li><a href="#summary" id="toc-summary"><span class="header-section-number">1.1</span> <strong>Summary</strong></a></li>
-  <li><a href="#introduction" id="toc-introduction"><span class="header-section-number">1.2</span> <strong>Introduction</strong></a></li>
+  <li><a href="#introduction" id="toc-introduction"><span class="header-section-number">1.2</span> <strong>Introduction</strong></a>
+  <ul>
+  <li><a href="#background" id="toc-background"><span class="header-section-number">1.2.1</span> <strong>Background</strong>:</a></li>
+  </ul></li>
   <li><a href="#methods-and-results" id="toc-methods-and-results"><span class="header-section-number">1.3</span> <strong>Methods and Results</strong></a>
   <ul>
   <li><a href="#data-loading" id="toc-data-loading"><span class="header-section-number">1.3.1</span> <strong>Data Loading</strong></a></li>
@@ -121,18 +124,20 @@ div.csl-indent {
 <h1 data-number="1"><span class="header-section-number">1</span> <strong>Car Evaluation Analysis</strong></h1>
 <section id="summary" class="level2" data-number="1.1">
 <h2 data-number="1.1" class="anchored" data-anchor-id="summary"><span class="header-section-number">1.1</span> <strong>Summary</strong></h2>
-<p>This project analyzes the <strong>Car Evaluation Dataset</strong> from <span class="citation" data-cites="UCI1988">UCI Machine Learning Repository (<a href="#ref-UCI1988" role="doc-biblioref">1988</a>)</span>, which contains 1728 with <strong>six categorical attributes: buying price</strong>, maintenance cost, number of doors, passenger capacity, luggage space, and safety rating. The dataset was clean, with no missing values or duplicates, and required <strong>ordinal encoding</strong> for machine learning analysis.</p>
-<p>Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the “class” variable was highly imbalanced, with “unacceptable” accounting for 1210 instances and “very good” only 65 instances. The k-Nearest Neighbors (kNN) model was trained to predict <strong>safety levels</strong> using the other features, achieving an accuracy of 44.06% with an optimal k of 19—an improvement over random guessing (33.33%) but highlighting the model’s limited predictive power.</p>
+<p>This project analyzes the <strong>Car Evaluation Dataset</strong> from <span class="citation" data-cites="UCI1988">UCI Machine Learning Repository (<a href="#ref-UCI1988" role="doc-biblioref">1988</a>)</span>, which contains 1728 rows with <strong>six categorical attributes: buying price</strong>, maintenance cost, number of doors, passenger capacity, luggage space, and safety rating. The dataset was clean, with no missing values or duplicates, and required <strong>ordinal encoding</strong> for machine learning analysis.</p>
+<p>Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the “class” variable was highly imbalanced, with “unacceptable” accounting for 1210 instances and “very good” only 65 instances. The k-Nearest Neighbors (kNN) model was trained to predict <strong>safety levels</strong> using the other features, achieving an accuracy of 46.09% with an optimal k of 17—an improvement over random guessing (33.33%) but highlighting the model’s limited predictive power.</p>
 <p>The findings indicate that individual features do not strongly determine safety levels independently, suggesting the need for more complex models or additional variables. These results have implications for both vehicle safety assessment and methodological best practices in categorical data analysis, reinforcing the importance of feature selection and encoding techniques for machine learning applications.</p>
 </section>
 <section id="introduction" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1.2</span> <strong>Introduction</strong></h2>
-<p>###<strong>Background</strong>:</p>
-<p>Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people’s daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40 000 fatailities (<span class="citation" data-cites="Wikipedia2019">Wikipedia Contributors (<a href="#ref-Wikipedia2019" role="doc-biblioref">2019</a>)</span>). Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.</p>
+<section id="background" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="background"><span class="header-section-number">1.2.1</span> <strong>Background</strong>:</h3>
+<p>Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people’s daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40,000 fatalities <span class="citation" data-cites="Wikipedia2019">Wikipedia Contributors (<a href="#ref-Wikipedia2019" role="doc-biblioref">2019</a>)</span>. Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.</p>
 <p>Research has shown that consumers are willing to invest in vehicle safety. For example, <span class="citation" data-cites="Andersson2008">Andersson (<a href="#ref-Andersson2008" role="doc-biblioref">2008</a>)</span> found that Swedish drivers were willing to pay a premium for improved car design and build quality to reduce the risk of injury in accidents. Additionally, design and material choices play a critical role in determining a vehicle’s safety. <span class="citation" data-cites="Nygren1983">Nygren (<a href="#ref-Nygren1983" role="doc-biblioref">1983</a>)</span> found that factors such as a car’s weight, seatbelt design, and headrests significantly influenced accident survivability. More recently, <span class="citation" data-cites="Richter2005">Richter et al. (<a href="#ref-Richter2005" role="doc-biblioref">2005</a>)</span> demonstrated that passive safety improvements—such as enhanced structural integrity and interior design modifications—have contributed to a measurable decline in injury rates from car accidents. These findings highlight the importance of identifying key factors that contribute to vehicle safety.</p>
 <p>Given this context, our research project aims to answer the following question:</p>
 <p><strong>Can we predict the estimated safety of a car using various attributes, such as its buying price, capacity (persons), and maintenance cost?</strong></p>
 <p>To answer this question, we will use the Car Evaluation Dataset from UC Irvine’s Machine Learning Repository. This multivariate classification dataset contains six car design and classification variables, and includes 1728 observations. Key variables that will be central to our analysis include the car’s buying price, maintenance cost, seating capacity (in terms of the number of passengers it can accommodate), and the car’s evaluation level (categorized as unacceptable, acceptable, good, or very good).</p>
+</section>
 </section>
 <section id="methods-and-results" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="methods-and-results"><span class="header-section-number">1.3</span> <strong>Methods and Results</strong></h2>
@@ -142,22 +147,22 @@ div.csl-indent {
 <div id="tbl-data" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Data-Preview
+Table&nbsp;1: Data Preview
 </figcaption>
 <div aria-describedby="tbl-data-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-stdout">
-<pre><code>     V1    V2 V3 V4    V5   V6    V7
-1 vhigh vhigh  2  2 small  low unacc
-2 vhigh vhigh  2  2 small  med unacc
-3 vhigh vhigh  2  2 small high unacc
-4 vhigh vhigh  2  2   med  low unacc
-5 vhigh vhigh  2  2   med  med unacc
-6 vhigh vhigh  2  2   med high unacc</code></pre>
+<pre><code>  buying maint doors persons lug_boot safety class
+1  vhigh vhigh     2       2    small    low unacc
+2  vhigh vhigh     2       2    small    med unacc
+3  vhigh vhigh     2       2    small   high unacc
+4  vhigh vhigh     2       2      med    low unacc
+5  vhigh vhigh     2       2      med    med unacc
+6  vhigh vhigh     2       2      med   high unacc</code></pre>
 </div>
 </div>
 </figure>
 </div>
-<p>Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation. <a href="#tbl-col" class="quarto-xref">Table&nbsp;2</a></p>
+<p>Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation as shown in <a href="#tbl-col" class="quarto-xref">Table&nbsp;2</a>.</p>
 <div id="tbl-col" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-col-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -193,11 +198,11 @@ Table&nbsp;3: Count of Missing and Duplicate Values
 </div>
 </figure>
 </div>
-<p>Amazing! No missing values and duplicate rows. <a href="#tbl-nan" class="quarto-xref">Table&nbsp;3</a></p>
+<p>As shown in <a href="#tbl-nan" class="quarto-xref">Table&nbsp;3</a>, there are no missing values or duplicate rows in our dataset.</p>
 </section>
 <section id="data-types" class="level3" data-number="1.3.3">
 <h3 data-number="1.3.3" class="anchored" data-anchor-id="data-types"><span class="header-section-number">1.3.3</span> <strong>Data Types</strong></h3>
-<p>Since k-Nearest Neighbors (kNN) is a distance-based algorithm, it requires numerical input for feature comparisons. However, our dataset currently consists of categorical variables (all factors in R).</p>
+<p>Since k-Nearest Neighbors (kNN) is a distance-based algorithm, it requires numerical input for feature comparisons. However, our dataset consists of categorical variables (all factors in R).</p>
 <div id="tbl-enc" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-enc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -216,7 +221,7 @@ Table&nbsp;4: Car Data Encoded
 </div>
 </figure>
 </div>
-<p><strong>Since we converted the text into numerical variables, we have attached the description of each numerical value per feature below for reference:</strong></p>
+<p><a href="#tbl-enc" class="quarto-xref">Table&nbsp;4</a> shows the transformed dataset after ordinal encoding. Here’s the meaning of each numerical value:</p>
 <p><strong><code>buying</code> and <code>maint</code></strong> - low: 1 - med: 2 - high: 3 - vhigh: 4</p>
 <p><strong><code>doors</code> and <code>persons</code></strong> - The values are technically numerical, but they only fall into 3 or 4 categories and are not continuous.</p>
 <p><strong><code>lug_boot</code> and <code>safety</code></strong> - small/low: 1 - med: 2 - big/high: 3</p>
@@ -299,7 +304,7 @@ Table&nbsp;6: Unique Occurrences Count
 <div id="fig-buy" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-buy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="report_files/figure-html/fig-buy-1.png" class="img-fluid figure-img" width="672">
+<img src="report_files/figure-html/fig-buy-1.png" class="img-fluid figure-img" width="768">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-buy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;1: Distribution of Buying Price by Safety Level
@@ -313,7 +318,7 @@ Figure&nbsp;1: Distribution of Buying Price by Safety Level
 <div id="fig-num" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-num-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="report_files/figure-html/fig-num-1.png" class="img-fluid figure-img" width="672">
+<img src="report_files/figure-html/fig-num-1.png" class="img-fluid figure-img" width="768">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-num-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;2: Distribution of Number of Persons by Safety Level
@@ -327,7 +332,7 @@ Figure&nbsp;2: Distribution of Number of Persons by Safety Level
 <div id="fig-main" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-main-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="report_files/figure-html/fig-main-1.png" class="img-fluid figure-img" width="672">
+<img src="report_files/figure-html/fig-main-1.png" class="img-fluid figure-img" width="768">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-main-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;3: Distribution of Maintenance Cost by Safety Level
@@ -337,38 +342,25 @@ Figure&nbsp;3: Distribution of Maintenance Cost by Safety Level
 </div>
 </div>
 <p><strong>Histograms of Safety Across 3 Input Variables: Buying Price, Capacity (Number of Persons), and Maintenance Cost</strong></p>
-<p>As we saw in the summary table, all the safety levels are evenly distributed across each of the independent variables.</p>
+<p>As we can see in the figures, all the safety levels are evenly distributed across each of the independent variables.</p>
 <p><strong>Initial Observations</strong></p>
-<p>The histograms indicate that the safety levels (<a href="#fig-buy" class="quarto-xref">Figure&nbsp;1</a>, <a href="#fig-num" class="quarto-xref">Figure&nbsp;2</a>, and <a href="#fig-main" class="quarto-xref">Figure&nbsp;3</a>) are evenly distributed across all three independent variables: buying price, number of persons, and maintenance cost. This suggests that the dataset is well-balanced with respect to safety levels, meaning that safety is not disproportionately concentrated in any particular category of these features. However, we do not observe significant variation is observed in the distribution of safety across these variables.</p>
+<p>The histograms indicate that the safety levels (<a href="#fig-buy" class="quarto-xref">Figure&nbsp;1</a>, <a href="#fig-num" class="quarto-xref">Figure&nbsp;2</a>, and <a href="#fig-main" class="quarto-xref">Figure&nbsp;3</a>) are evenly distributed across all three independent variables: buying price, number of persons, and maintenance cost. This suggests that the dataset is well-balanced with respect to safety levels, meaning that safety is not disproportionately concentrated in any particular category of these features. However, we do not observe significant variation in the distribution of safety across these variables.</p>
 <p><strong>Proceeding with Analysis</strong></p>
 <p>While individual variables may not show a strong distinction in safety levels on their own, the interaction between multiple features could still be meaningful for classification. Just because safety is evenly distributed across each independent variable separately doesn’t mean that a combination of factors (e.g., high buying price + low maintenance + more persons) won’t reveal patterns that help predict safety levels.</p>
 </section>
 <section id="knn-classification-analysis" class="level3" data-number="1.3.6">
 <h3 data-number="1.3.6" class="anchored" data-anchor-id="knn-classification-analysis"><span class="header-section-number">1.3.6</span> <strong>kNN Classification Analysis</strong></h3>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Best k found through cross-validation: 17 </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Best cross-validation accuracy: 47.22 %</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Test Set Accuracy: 46.09 %</code></pre>
-</div>
-</div>
 <p>The final kNN model achieved 46.09% accuracy, which is somewhat reflective of the CV accuracy of 47.22%. This is not a great accuracy, but it’s better than random guessing, which would be 33.33%.</p>
 </section>
 <section id="visualization-of-analysis" class="level3" data-number="1.3.7">
 <h3 data-number="1.3.7" class="anchored" data-anchor-id="visualization-of-analysis"><span class="header-section-number">1.3.7</span> <strong>Visualization of Analysis</strong></h3>
-<p>Since we are using multiple input variables for our kNN classification, it wouldn’t be possible to graph it out 2D. We will do a <strong>confusion matrix</strong> as our visualization.</p>
+<p>Since we are using multiple input variables for our kNN classification, it wouldn’t be possible to graph it out in 2D. We will use a <strong>confusion matrix</strong> as our visualization.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-conf" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-conf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="report_files/figure-html/fig-conf-1.png" class="img-fluid figure-img" width="672">
+<img src="report_files/figure-html/fig-conf-1.png" class="img-fluid figure-img" width="768">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-conf-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Figure&nbsp;4: Confusion Matrix to Evaluate Model Performance
@@ -377,7 +369,7 @@ Figure&nbsp;4: Confusion Matrix to Evaluate Model Performance
 </div>
 </div>
 </div>
-<p><strong>Heatmap of Confusion Matrix for Visualization of Analysis</strong></p>
+<p><a href="#fig-conf" class="quarto-xref">Figure&nbsp;4</a> shows the heatmap visualization of our confusion matrix for the kNN classification model.</p>
 </section>
 </section>
 <section id="discussion" class="level2" data-number="1.4">
@@ -385,7 +377,7 @@ Figure&nbsp;4: Confusion Matrix to Evaluate Model Performance
 <section id="what-we-found" class="level3" data-number="1.4.1">
 <h3 data-number="1.4.1" class="anchored" data-anchor-id="what-we-found"><span class="header-section-number">1.4.1</span> <strong>What We Found</strong></h3>
 <p>The analysis started with a car evaluation dataset lacking column names, which were manually assigned as “buying,” “maint,” “doors,” “persons,” “lug_boot,” “safety,” and “class” based on UCI documentation. The dataset, comprising 1728 rows, was clean with no missing values or duplicates. All variables were categorical and ordinal, necessitating ordinal encoding into numerical values for k-Nearest Neighbors (kNN) analysis. Summary statistics revealed balanced distributions across most features (e.g., “buying,” “maint,” “doors,” “lug_boot,” “safety,” and “persons”), with each category appearing 432 or 576 times. However, the “class” variable was highly imbalanced, with “unacc” dominating (1210 instances) and “vgood” rare (65 instances), though this was irrelevant as “class” was not used in the kNN analysis.</p>
-<p>Exploratory Data Analysis (EDA) using histograms showed that “safety” levels (low, medium, high) were evenly distributed across “buying,” “persons,” and “maint,” indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict “safety” using other features, achieved a final accuracy of 46.09% with an optimal k of 17, surpassing random guessing (33.33% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.</p>
+<p>Exploratory Data Analysis (EDA) using histograms as shown in <a href="#fig-buy" class="quarto-xref">Figure&nbsp;1</a>, <a href="#fig-num" class="quarto-xref">Figure&nbsp;2</a>, and <a href="#fig-main" class="quarto-xref">Figure&nbsp;3</a> revealed that “safety” levels (low, medium, high) were evenly distributed across “buying,” “persons,” and “maint,” indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict “safety” using other features, achieved a final accuracy of 46.09% with an optimal k of 17, surpassing random guessing (33.33% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized in <a href="#fig-conf" class="quarto-xref">Figure&nbsp;4</a> shows the model’s performance, highlighting prediction accuracies and errors across safety levels.</p>
 <p>The dataset’s cleanliness and balanced feature distributions partially aligned with expectations, given its UCI origin, known for structured datasets. The absence of missing values and duplicates was anticipated, simplifying preprocessing. However, the uniform distribution of “safety” across individual features was unexpected. Real-world data might show biases—e.g., higher safety with lower buying prices or higher maintenance costs due to safety features—yet this dataset lacked such trends, possibly indicating synthetic balancing for algorithmic testing.</p>
 <p>The kNN accuracy of 46.09% was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase to 47.22% from 46.09% with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.</p>
 </section>
@@ -398,8 +390,8 @@ Figure&nbsp;4: Confusion Matrix to Evaluate Model Performance
 <h3 data-number="1.4.3" class="anchored" data-anchor-id="future-questions"><span class="header-section-number">1.4.3</span> <strong>Future Questions</strong></h3>
 <p>The analysis raises several questions for further exploration each aiming to enhance its practical and analytical value:</p>
 <ol type="1">
-<li><p><strong>Incorporating Additional Car Attributes</strong>: Could adding car-specific variables—like crash test scores, manufacturing year, or brand reputation—enhance safety predictions? Expanding the dataset with real-world metrics, such as fuel efficiency, engine type (e.g., electric vs.&nbsp;gasoline), or historical recall data, might improve its utility for buyers or manufacturers. For instance, integrating standardized safety ratings (e.g., IIHS or NHTSA scores) could boost model accuracy beyond 46.09, while manufacturing year might highlight safety evolution, and brand reputation could reflect quality consistency. This could transform the dataset into a robust tool for practical car evaluation.</p></li>
-<li><p><strong>Consumer Preferences and Safety Trade-offs</strong>: How do car features like buying price or maintenance cost influence consumer perceptions of safety versus affordability? Survey data or X post analysis could reveal if buyers prioritize low-cost options over safety, guiding how manufacturers balance these factors in car design.</p></li>
+<li><p><strong>Incorporating Additional Car Attributes</strong>: Could adding car-specific variables—like crash test scores, manufacturing year, or brand reputation—enhance safety predictions? Expanding the dataset with real-world metrics, such as fuel efficiency, engine type (e.g., electric vs.&nbsp;gasoline), or historical recall data, might improve its utility for buyers or manufacturers. For instance, integrating standardized safety ratings (e.g., IIHS or NHTSA scores) could boost model accuracy beyond 46.09%, while manufacturing year might highlight safety evolution, and brand reputation could reflect quality consistency. This could transform the dataset into a robust tool for practical car evaluation.</p></li>
+<li><p><strong>Consumer Preferences and Safety Trade-offs</strong>: How do car features like buying price or maintenance cost influence consumer perceptions of safety versus affordability? Survey data or social media analysis could reveal if buyers prioritize low-cost options over safety, guiding how manufacturers balance these factors in car design.</p></li>
 <li><p><strong>Environmental Impact on Car Safety</strong>: Could environmental factors, such as typical driving conditions (urban vs.&nbsp;rural) or climate (e.g., snowy regions), affect safety ratings in this dataset? Linking car attributes to usage contexts might show if features like luggage boot size or door count adapt to safety needs in diverse settings.</p></li>
 <li><p><strong>Temporal Dynamics of Car Evaluation</strong>: How would safety predictions change if the dataset tracked cars over time, such as pre- and post-safety regulation changes? A longitudinal approach could assess if older cars with fewer doors or lower safety ratings become outliers as standards evolve.</p></li>
 <li><p><strong>Cross-Cultural Car Evaluation</strong>: Do safety priorities differ across regions (e.g., North America vs.&nbsp;Europe vs.&nbsp;Asia), and how might this dataset adapt? Incorporating regional safety standards or car preferences (e.g., compact cars in Europe) could test its global applicability, revealing cultural influences on car evaluation.</p></li>
