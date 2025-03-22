@@ -147,14 +147,25 @@ test_accuracy <- round(sum(predictions == test_y) / length(test_y)*100, 2)
 
 cat("Test Set Accuracy:", test_accuracy, "%\n")
 
-rand <- 0.3333*100
+car_data_summary <- car_data_encoded %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
+  group_by(Variable, Value) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  arrange(Variable, desc(Count))
+
+print(car_data_summary)
+
+rand <- round((max(car_data_summary[23, "Count"],
+            car_data_summary[24, "Count"],
+            car_data_summary[25, "Count"])/nrow(car_data))*100, 2)
+
 ```
 
 ## **Summary**
 
 This project analyzes the **Car Evaluation Dataset** from @UCI1988, which contains `r nrow(car_data)` with **six categorical attributes: buying price**, maintenance cost, number of doors, passenger capacity, luggage space, and safety rating. The dataset was clean, with no missing values or duplicates, and required **ordinal encoding** for machine learning analysis.
 
-Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the "class" variable was highly imbalanced, with "unacceptable" accounting for **1,210 instances** and "very good" only **65 instances**. The k-Nearest Neighbors (kNN) model was trained to predict **safety levels** using the other features, achieving an accuracy of `r test_accuracy` with an optimal `r best_k`—an improvement over random guessing (`r rand`) but highlighting the model's limited predictive power.
+Exploratory Data Analysis (EDA) revealed balanced distributions across most features. However, the "class" variable was highly imbalanced, with "unacceptable" accounting for `r car_data_summary[5, "Count"]` instances and "very good" only `r car_data_summary[8, "Count"]` instances. The k-Nearest Neighbors (kNN) model was trained to predict **safety levels** using the other features, achieving an accuracy of `r test_accuracy`% with an optimal k of `r best_k`—an improvement over random guessing (`r rand`%) but highlighting the model's limited predictive power.
 
 The findings indicate that individual features do not strongly determine safety levels independently, suggesting the need for more complex models or additional variables. These results have implications for both vehicle safety assessment and methodological best practices in categorical data analysis, reinforcing the importance of feature selection and encoding techniques for machine learning applications.
 
@@ -162,7 +173,7 @@ The findings indicate that individual features do not strongly determine safety 
 
 ###**Background**:
 
-Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people's daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40,000 fatalities (@Wikipedia2019). Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.
+Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people's daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40 000 fatailities (@Wikipedia2019). Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.
 
 Research has shown that consumers are willing to invest in vehicle safety. For example, @Andersson2008 found that Swedish drivers were willing to pay a premium for improved car design and build quality to reduce the risk of injury in accidents. Additionally, design and material choices play a critical role in determining a vehicle's safety. @Nygren1983 found that factors such as a car’s weight, seatbelt design, and headrests significantly influenced accident survivability. More recently, @Richter2005 demonstrated that passive safety improvements—such as enhanced structural integrity and interior design modifications—have contributed to a measurable decline in injury rates from car accidents. These findings highlight the importance of identifying key factors that contribute to vehicle safety.
 
@@ -310,10 +321,10 @@ car_data_summary <- car_data_encoded %>%
   summarise(Count = n(), .groups = "drop") %>%
   arrange(Variable, desc(Count))
 
-print(car_data_summary)
+print(car_data_summary, n = Inf)
 ```
 
-@tbl-cnt provides a clearer picture of the dataset's distribution across categorical variables. The `buying`, `maint`, and `doors` features all have an even distribution, with each level appearing `r car_data_summary[1, "Count"]` times, suggesting a balanced dataset for these features. The `safety`, `lug_boot` and `persons` features are also evenly distributed across its three levels, with `r car_data_summary[13, "Count"]` occurrences each, ensuring no significant class imbalance in this variable. However, the `class` is highly imbalanced, with "unacc" (encoded as 1) making up the majority (`r car_data_summary[5, "Count"]` occurrences), while "vgood" (encoded as 4) is rare (only `r car_data_summary[8, "Count"]` occurrences). Since we are not using the `class` variable in our analysis, this is not much of a concern. 
+@tbl-cnt provides a clearer picture of the dataset's distribution across categorical variables. The `buying`, `maint`, and `doors` features all have an even distribution, with each level appearing `r car_data_summary[1, "Count"]` times, suggesting a balanced dataset for these features. The `safety`, `lug_boot` and `persons` features are also evenly distributed across its three levels, with `r car_data_summary[13, "Count"]` occurrences each, ensuring no significant class imbalance in this variable. However, the `class` is highly imbalanced, with "unacc" (encoded as 1) making up the majority (`r car_data_summary[5, "Count"]` occurrences), while "vgood" (encoded as 4) is rare (only `r car_data_summary[8, "Count"]` occurrences). Since we are not using the `class` variable in our analysis, this is not much of a concern.
 
 **Our x and y variables all have sufficient data points for analysis!**
 
@@ -462,7 +473,7 @@ test_accuracy <- round(sum(predictions == test_y) / length(test_y)*100, 2)
 cat("Test Set Accuracy:", test_accuracy, "%\n")
 ```
 
-The final kNN model achieved `r test_accuracy` accuracy, which is somewhat reflective of the CV accuracy of `r best_cv_accuracy`. This is not a great accuracy, but it's better than random guessing, which would be `r rand`
+The final kNN model achieved `r test_accuracy`% accuracy, which is somewhat reflective of the CV accuracy of `r best_cv_accuracy`%. This is not a great accuracy, but it's better than random guessing, which would be `r rand`%.
 
 ### **Visualization of Analysis**
 
@@ -500,17 +511,17 @@ ggplot(conf_matrix_df, aes(x = Predicted_Label, y = True_Label, fill = Count)) +
 
 The analysis started with a car evaluation dataset lacking column names, which were manually assigned as "buying," "maint," "doors," "persons," "lug_boot," "safety," and "class" based on UCI documentation. The dataset, comprising `r nrow(car_data)` rows, was clean with no missing values or duplicates. All variables were categorical and ordinal, necessitating ordinal encoding into numerical values for k-Nearest Neighbors (kNN) analysis. Summary statistics revealed balanced distributions across most features (e.g., "buying," "maint," "doors," "lug_boot," "safety," and "persons"), with each category appearing `r car_data_summary[1, "Count"]` or `r car_data_summary[13, "Count"]` times. However, the "class" variable was highly imbalanced, with "unacc" dominating (`r car_data_summary[5, "Count"]` instances) and "vgood" rare (`r car_data_summary[8, "Count"]` instances), though this was irrelevant as "class" was not used in the kNN analysis.
 
-Exploratory Data Analysis (EDA) using histograms showed that "safety" levels (low, medium, high) were evenly distributed across "buying," "persons," and "maint," indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict "safety" using other features, achieved a final accuracy of `r test_accuracy` with an optimal k of `r best_k`, surpassing random guessing (`r rand` for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.
+Exploratory Data Analysis (EDA) using histograms showed that "safety" levels (low, medium, high) were evenly distributed across "buying," "persons," and "maint," indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict "safety" using other features, achieved a final accuracy of `r test_accuracy`% with an optimal k of `r best_k`, surpassing random guessing (`r rand`% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.
 
 The dataset’s cleanliness and balanced feature distributions partially aligned with expectations, given its UCI origin, known for structured datasets. The absence of missing values and duplicates was anticipated, simplifying preprocessing. However, the uniform distribution of "safety" across individual features was unexpected. Real-world data might show biases—e.g., higher safety with lower buying prices or higher maintenance costs due to safety features—yet this dataset lacked such trends, possibly indicating synthetic balancing for algorithmic testing.
 
-The kNN accuracy of `r test_accuracy` was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase to `r best_cv_accuracy` from `r test_accuracy` with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.
+The kNN accuracy of `r test_accuracy`% was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase to `r best_cv_accuracy`% from `r test_accuracy`% with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.
 
 ### **Potential Impact**
 
 These results have practical and methodological implications. The preprocessing and encoding workflow offers a replicable approach for handling ordinal categorical data, applicable to fields like healthcare or marketing. The balanced predictors ensure unbiased model training, making this dataset a fair benchmark for algorithmic evaluation.
 
-However, the kNN’s `r test_accuracy` accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.
+However, the kNN’s `r test_accuracy`% accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.
 
 ### **Future Questions**
 
