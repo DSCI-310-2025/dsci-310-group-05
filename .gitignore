@@ -2,8 +2,6 @@
 .Rhistory
 .Rapp.history
 .ipynb_checkpoints
-.npm\_logs
-.local\share\jupyter
 
 .jupyter/
 .local/share/jupyter/
