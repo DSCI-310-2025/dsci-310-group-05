@@ -2,6 +2,7 @@ library(docopt)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+library(readr)
 
 doc <- "
 Exploratory Data Analysis Script
@@ -20,11 +21,14 @@ car_data_encoded <- read.csv(opt$input_file)
 summary(car_data_encoded)
 
 # Count occurrences for each unique value in each column
-car_data_encoded %>%
+unique_occurences <- car_data_encoded %>%
   pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
   group_by(Variable, Value) %>%
   summarise(Count = n(), .groups = "drop") %>%
   arrange(Variable, desc(Count))
+
+write_csv(unique_occurences, "output/eda_summary/unique_occurences.csv")
+
 
 # Convert encoded variables back to categorical labels
 car_data_labeled <- car_data_encoded %>%

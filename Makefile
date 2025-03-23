@@ -20,6 +20,8 @@ clean:
 	rm -f index.html
 	rm -f *.pdf
 	rm -f output/*.png
+	rm -f output/*.csv
+	rm -f output/eda_summary/*
 	find analysis -type f ! -name "report.qmd" ! -name "references.bib" -delete
 	
 all: data/original/car_data.csv data/clean/car_clean.csv output/eda_summary.csv output/knn_model.RDS output/cf_matrix.png car_evaluation.html car_evaluation.pdf

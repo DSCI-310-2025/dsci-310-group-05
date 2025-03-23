@@ -20,12 +20,29 @@ car_data <- janitor::clean_names(car_data)
 # Assign column names
 colnames(car_data) <- c("buying", "maint", "doors", "persons", "lug_boot", "safety", "class")
 
-# Checking for missing values
-if (sum(is.na(car_data)) > 0) {
+col_car_data <- car_data
+write_csv(col_car_data, "data/clean/col_car_data.csv")
+
+# Count missing values and duplicate rows
+num_missing <- sum(is.na(car_data))
+num_duplicates <- nrow(car_data) - nrow(distinct(car_data))
+
+# Save summary for Quarto
+nan_summary <- data.frame(
+  Metric = c("Missing Values", "Duplicate Rows"),
+  Count = c(num_missing, num_duplicates)
+)
+write_csv(nan_summary, "data/clean/nan_and_duplicates_summary.csv")
+
+# Console warning
+if (num_missing > 0) {
   print("Warning: Missing values detected.")
 }
+if (num_duplicates > 0) {
+  print("Warning: Duplicate rows detected.")
+}
 
-# Remove duplicate rows (if any)
+# Remove duplicate rows
 car_data <- car_data %>% distinct()
 
 # Encoding function for categorical features
