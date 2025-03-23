@@ -29,7 +29,6 @@ unique_occurences <- car_data_encoded %>%
 
 write_csv(unique_occurences, "output/eda_summary/unique_occurences.csv")
 
-
 # Convert encoded variables back to categorical labels
 car_data_labeled <- car_data_encoded %>%
   mutate(

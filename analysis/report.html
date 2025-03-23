@@ -96,7 +96,10 @@ div.csl-indent {
   <li><a href="#car-evaluation-analysis" id="toc-car-evaluation-analysis"><span class="header-section-number">1</span> <strong>Car Evaluation Analysis</strong></a>
   <ul>
   <li><a href="#summary" id="toc-summary"><span class="header-section-number">1.1</span> <strong>Summary</strong></a></li>
-  <li><a href="#introduction" id="toc-introduction"><span class="header-section-number">1.2</span> <strong>Introduction</strong></a></li>
+  <li><a href="#introduction" id="toc-introduction"><span class="header-section-number">1.2</span> <strong>Introduction</strong></a>
+  <ul>
+  <li><a href="#background" id="toc-background"><span class="header-section-number">1.2.1</span> <strong>Background</strong>:</a></li>
+  </ul></li>
   <li><a href="#methods-and-results" id="toc-methods-and-results"><span class="header-section-number">1.3</span> <strong>Methods and Results</strong></a>
   <ul>
   <li><a href="#data-loading" id="toc-data-loading"><span class="header-section-number">1.3.1</span> <strong>Data Loading</strong></a></li>
@@ -127,12 +130,14 @@ div.csl-indent {
 </section>
 <section id="introduction" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1.2</span> <strong>Introduction</strong></h2>
-<p>###<strong>Background</strong>:</p>
+<section id="background" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="background"><span class="header-section-number">1.2.1</span> <strong>Background</strong>:</h3>
 <p>Cars and personal transportation are an inevitable part of everyday life in the developed world. They play a crucial role in people’s daily routines, enabling them to commute to work, travel, attend social gatherings, and explore new places. However, cars also pose significant safety risks. In 2023 alone, car accidents accounted for over 40 000 fatailities (<span class="citation" data-cites="Wikipedia2019">Wikipedia Contributors (<a href="#ref-Wikipedia2019" role="doc-biblioref">2019</a>)</span>). Given these risks, it is no surprise that many individuals seek ways to make car travel safer while maintaining its convenience and necessity.</p>
 <p>Research has shown that consumers are willing to invest in vehicle safety. For example, <span class="citation" data-cites="Andersson2008">Andersson (<a href="#ref-Andersson2008" role="doc-biblioref">2008</a>)</span> found that Swedish drivers were willing to pay a premium for improved car design and build quality to reduce the risk of injury in accidents. Additionally, design and material choices play a critical role in determining a vehicle’s safety. <span class="citation" data-cites="Nygren1983">Nygren (<a href="#ref-Nygren1983" role="doc-biblioref">1983</a>)</span> found that factors such as a car’s weight, seatbelt design, and headrests significantly influenced accident survivability. More recently, <span class="citation" data-cites="Richter2005">Richter et al. (<a href="#ref-Richter2005" role="doc-biblioref">2005</a>)</span> demonstrated that passive safety improvements—such as enhanced structural integrity and interior design modifications—have contributed to a measurable decline in injury rates from car accidents. These findings highlight the importance of identifying key factors that contribute to vehicle safety.</p>
 <p>Given this context, our research project aims to answer the following question:</p>
 <p><strong>Can we predict the estimated safety of a car using various attributes, such as its buying price, capacity (persons), and maintenance cost?</strong></p>
 <p>To answer this question, we will use the Car Evaluation Dataset from UC Irvine’s Machine Learning Repository. This multivariate classification dataset contains six car design and classification variables. Key variables that will be central to our analysis include the car’s buying price, maintenance cost, seating capacity (in terms of the number of passengers it can accommodate), and the car’s evaluation level (categorized as unacceptable, acceptable, good, or very good).</p>
+</section>
 </section>
 <section id="methods-and-results" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="methods-and-results"><span class="header-section-number">1.3</span> <strong>Methods and Results</strong></h2>
