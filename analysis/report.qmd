@@ -52,7 +52,6 @@ The dataset was retrieved from an online source and loaded into R for analysis u
 #| label: tbl-data
 #| tbl-cap: "Data-Preview"
 car_data <- read_csv("../data/original/car_data.csv")
-car_data
 
 # Display first few rows
 head(car_data)
@@ -67,8 +66,6 @@ Although the dataset comes with predefined columns, it does not include column n
 col_car_data <- read_csv("../data/clean/col_car_data.csv")
 head(col_car_data)
 ```
-
-### **Data Wrangling and Cleaning**
 
 ```{r, echo=FALSE}
 #| label: tbl-nan
@@ -89,7 +86,6 @@ Since k-Nearest Neighbors (kNN) is a distance-based algorithm, it requires numer
 #| tbl-cap: "Car Data Encoded"
 
 car_data_clean <- read_csv("../data/clean/car_clean.csv")
-head(car_data_clean)
 
 # Display first few rows
 head(car_data_clean)
