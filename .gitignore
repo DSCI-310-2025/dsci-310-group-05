@@ -6,7 +6,7 @@
 .jupyter/
 .local/share/jupyter/
 .npm/_logs/
-
+README_files
 
 # Session Data files
 .RData
@@ -23,6 +23,7 @@
 
 # Output files from R CMD check
 /*.Rcheck/
+README.html
 
 # RStudio files
 .Rproj.user/
