@@ -5,9 +5,19 @@
 #' @return A data frame with columns: Variable, Value, Count.
 #' @export
 count_unique_values <- function(data) {
-  data %>%
-    pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
-    group_by(Variable, Value) %>%
-    summarise(Count = n(), .groups = "drop") %>%
-    arrange(Variable, desc(Count))
+  if (!is.data.frame(data)) {
+    stop("Input must be a dataframe")
+  }
+  
+  if (!requireNamespace("dplyr", quietly = TRUE)) {
+    stop("Package 'dplyr' is needed for this function to work. Please install it.", 
+         call. = FALSE)
+  }
+  
+  result <- data.frame(
+    column = names(data),
+    unique_count = sapply(data, function(x) length(unique(x)))
+  )
+  
+  return(result)
 }
