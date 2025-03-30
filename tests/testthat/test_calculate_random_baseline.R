@@ -1,5 +1,5 @@
 library(testthat)
-source("R/calculate_random_baseline.R")
+source("../../R/calculate_random_baseline.R")
 
 test_that("calculate_random_baseline computes expected values", {
   expect_equal(calculate_random_baseline(c("a", "b", "a", "b")), 0.5)

@@ -1,3 +1,4 @@
+library(testthat)
 source(testthat::test_path("../../R/encode_safety.R"))
 
 test_that("encode_safety function works correctly", {

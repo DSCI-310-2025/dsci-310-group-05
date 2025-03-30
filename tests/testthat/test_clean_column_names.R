@@ -1,3 +1,4 @@
+library(testthat)
 source("../../R/clean_column_names.R")
 
 
