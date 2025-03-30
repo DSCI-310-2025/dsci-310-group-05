@@ -1,3 +1,4 @@
+library(testthat)
 source("../../R/save_cleaned_data.R")
 
 test_that("save_cleaned_data function works correctly", {

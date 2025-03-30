@@ -7,11 +7,15 @@
 #' @return A list with train_x, train_y, test_x, test_y.
 #' @export
 split_data <- function(data, response_col = "safety", prop = 0.8) {
+  if (!(response_col %in% colnames(data))) {
+    stop(paste("Response column", response_col, "not found in data."))
+  }
+
   set.seed(123)
   idx <- caret::createDataPartition(data[[response_col]], p = prop, list = FALSE)
   train <- data[idx, ]
   test <- data[-idx, ]
-  
+
   return(list(
     train_x = train %>% dplyr::select(-all_of(response_col)),
     train_y = train[[response_col]],
@@ -19,3 +23,4 @@ split_data <- function(data, response_col = "safety", prop = 0.8) {
     test_y = test[[response_col]]
   ))
 }
+

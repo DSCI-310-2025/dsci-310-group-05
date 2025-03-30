@@ -1,5 +1,5 @@
 library(testthat)
-source("R/split_data.R")
+source("../../R/split_data.R")
 
 df <- tibble::tibble(
   buying = rep(1:2, each = 10),
@@ -19,5 +19,8 @@ test_that("split_data returns valid training/testing partition", {
 })
 
 test_that("split_data errors if response column is missing", {
-  expect_error(split_data(df, "nonexistent"), "object 'nonexistent' not found")
+  expect_error(
+    split_data(df, "nonexistent"),
+    "Response column.*not found"
+  )
 })

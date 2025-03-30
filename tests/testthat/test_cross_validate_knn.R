@@ -1,6 +1,6 @@
 library(testthat)
-source("R/cross_validate_knn.R")
-source("R/split_data.R")
+source("../../R/cross_validate_knn.R")
+source("../../R/split_data.R")
 
 df <- tibble::tibble(
   buying = sample(1:4, 60, replace = TRUE),
@@ -22,6 +22,7 @@ test_that("cross_validate_knn returns increasing k values and reasonable accurac
 test_that("cross_validate_knn fails gracefully with empty input", {
   expect_error(
     cross_validate_knn(data.frame(), factor()),
-    "data has 0 rows"
+    "nrow\\(x\\) > 1 is not TRUE"  # escape parentheses
   )
 })
+

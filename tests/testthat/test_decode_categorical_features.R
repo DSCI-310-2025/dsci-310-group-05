@@ -1,16 +1,15 @@
 library(testthat)
-
-source("R/decode_categorical_features.R") 
+source("../../R/decode_categorical_features.R")
 
 # ---- TEST decode_categorical_features ----
 test_that("decode_categorical_features works when all categorical columns exist", {
-  df <- tibble(buying = c(1, 2, 3, 4), maint = c(1, 2, 3, 4), persons = c(2, 4, 5), class = c(1, 2, 3, 4))
+  df <- tibble(buying = c(1, 2, 3, 4), maint = c(1, 2, 3, 4), persons = c(2, 4, 5, 3), class = c(1, 2, 3, 4))
   result <- decode_categorical_features(df)
   expect_true(all(levels(result$buying) == c("low", "med", "high", "vhigh")))
 })
 
 test_that("decode_categorical_features works when some categorical columns are missing", {
-  df <- tibble(buying = c(1, 2, 3, 4), persons = c(2, 4, 5))
+  df <- tibble(buying = c(1, 2, 3, 4), persons = c(2, 4, 5, 3))
   result <- decode_categorical_features(df)
   expect_true(all(levels(result$buying) == c("low", "med", "high", "vhigh")))
 })

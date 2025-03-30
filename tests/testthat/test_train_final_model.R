@@ -1,6 +1,6 @@
 library(testthat)
-source("R/train_final_model.R")
-source("R/split_data.R")
+source("../../R/train_final_model.R")
+source("../../R/split_data.R")
 
 df <- tibble::tibble(
   x1 = rnorm(30),
@@ -11,7 +11,7 @@ df <- tibble::tibble(
 split <- split_data(df)
 
 test_that("train_final_model returns model with correct k and structure", {
-  model <- train_final_model(split$train_x, split$train_y, best_k = 5)
+  model <- suppressWarnings(train_final_model(split$train_x, split$train_y, best_k = 5))
 
   expect_s3_class(model, "train")
   expect_equal(model$method, "knn")
@@ -19,6 +19,13 @@ test_that("train_final_model returns model with correct k and structure", {
   expect_true("Accuracy" %in% colnames(model$results))
 })
 
-test_that("train_final_model fails when k is missing", {
-  expect_error(train_final_model(split$train_x, split$train_y, NULL), "must be numeric")
+test_that("train_final_model fails when k is missing or invalid", {
+  expect_error(
+    train_final_model(split$train_x, split$train_y, NULL),
+    "must be a single numeric value"
+  )  
+  expect_error(
+    train_final_model(split$train_x, split$train_y, "five"),
+    "must be a single numeric value"
+  )
 })

@@ -1,3 +1,5 @@
+library(testthat)
+
 source(testthat::test_path("../../R/encode_levels.R"))
 test_that("encode_levels function works correctly", {
   expect_equal(encode_levels("low"), 1)
