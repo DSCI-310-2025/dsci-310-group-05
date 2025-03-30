@@ -5,5 +5,10 @@
 #' @return A summary of the data frame.
 #' @export
 summarize_data <- function(data) {
-  return(summary(data))
+  if (!is.data.frame(data)) {
+    stop("Input must be a data frame.")
+  }
+
+  print(summary(data))  
 }
+
