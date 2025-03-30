@@ -1,4 +1,5 @@
 library(testthat)
+library(tidyverse)
 source("../../R/count_unique_values.R")
 
 test_that("count_unique_values works with different data types", {
