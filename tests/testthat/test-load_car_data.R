@@ -1,6 +1,15 @@
 library(testthat)
-source("helper-LOAD_CAR_DATA.R")
 source("../R/load_car_data.R")  # Replace with actual file
+
+generate_temp_output_path <- function(filename = "car_data.csv") {
+  file.path(tempdir(), filename)
+}
+
+clean_up_file <- function(file_path) {
+  if (file.exists(file_path)) {
+    file.remove(file_path)
+  }
+}
 
 test_that("load_car_data returns a dataframe with correct structure", {
   output_path <- generate_temp_output_path()
