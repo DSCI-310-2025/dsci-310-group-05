@@ -1,4 +1,5 @@
 library(testthat)
+library(caret)
 source("../../R/train_final_model.R")
 source("../../R/split_data.R")
 
