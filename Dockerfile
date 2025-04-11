@@ -27,7 +27,7 @@ RUN R -e "install.packages('remotes', repos='https://cran.r-project.org')" && \
     R -e "remotes::install_version('pbdZMQ', version='0.3-9', repos='https://cran.r-project.org')" && \
     R -e "remotes::install_version('janitor', version='2.2.0', repos='https://cran.r-project.org')" && \
     R -e "remotes::install_version('docopt', version='0.7.1', repos='https://cran.r-project.org')" && \
-    R -e "remotes::install_version('readr', version='2.1.5', repos='https://cran.r-project.org')" && \
+    R -e "remotes::install_version('readr', version='2.1.5', repos='https://cran.r-project.org')"
     
 
 # Expose ports for RStudio (8787) and Jupyter Notebook (8888)
