@@ -1,6 +1,6 @@
 services:
   rstudio:
-    image: rocker/rstudio:4.4.2
+    image: kevinl002/dsci-310-group-05-container
     ports:
       - "8787:8787"
       - "8888:8888"
