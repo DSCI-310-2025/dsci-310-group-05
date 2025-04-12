@@ -5,6 +5,10 @@ library(ggplot2)
 library(dplyr)
 library(readr)
 
+source("R/calculate_random_baseline.R")
+source("R/cross_validate_knn.R")
+source("R/train_final_model.R")
+
 doc <- "
 Modeling Script
 
@@ -33,35 +37,22 @@ train_y <- train_data$safety
 test_x <- test_data %>% select(-safety)
 test_y <- test_data$safety
 
-# k values to try
-k_values <- seq(1, 21, 2)
-cv_results <- data.frame(k = integer(), accuracy = numeric())
-
-# Cross-validation
-for (k in k_values) {
-  set.seed(123)
-  knn_model <- train(train_x, train_y, method = "knn",
-                     trControl = trainControl(method = "cv", number = 5),
-                     tuneGrid = data.frame(k = k))
-  cv_results <- rbind(cv_results, data.frame(k = k, accuracy = max(knn_model$results$Accuracy)))
-}
+# Performing cross validation with various k values
+cv_results <- cross_validate_knn(train_x, train_y, k_values = seq(1, 21, 2))
 
 # Best k
 best_k <- cv_results$k[which.max(cv_results$accuracy)]
 best_cv_accuracy <- max(cv_results$accuracy)
 
 # Final model
-final_knn_model <- train(train_x, train_y, method = "knn",
-                         trControl = trainControl(method = "none"),
-                         tuneGrid = data.frame(k = best_k))
+final_knn_model <- train_final_model(train_x, train_y, best_k)
 
 # Predictions
 predictions <- predict(final_knn_model, test_x)
 test_accuracy <- sum(predictions == test_y) / length(test_y)
 
 # Baseline accuracy (random guessing)
-num_classes <- n_distinct(test_y)
-rand <- 1 / num_classes
+rand <- calculate_random_baseline(test_y)
 
 # Save metrics as CSV
 metrics_df <- data.frame(

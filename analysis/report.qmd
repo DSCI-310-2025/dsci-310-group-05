@@ -63,7 +63,7 @@ Although the dataset comes with predefined columns, it does not include column n
 #| label: tbl-col
 #| tbl-cap: "Assigning the column names"
 
-col_car_data <- read_csv("../data/clean/col_car_data.csv")
+col_car_data <- read_csv("../data/clean/car_clean.csv")
 head(col_car_data)
 ```
 
