@@ -2,6 +2,9 @@ library(docopt)
 library(readr)
 library(janitor)
 
+# Source the function
+source("R/load_car_data.R")
+
 doc <- "
 This script loads in the data from the UCI website.
 This dataset contains categorical variables describing various attributes of cars, 
@@ -14,10 +17,7 @@ Usage:
 opt <- docopt(doc)
 
 # Reads the dataset from the URL provided as a command-line argument.
-car_data <- read.csv(opt$file_path, header = FALSE, stringsAsFactors = TRUE) #Converts string-based categorical variables into factors.
-
-# Saves the downloaded dataset to the file path specified in the command-line argument.
-write.csv(car_data, opt$output_path, row.names = FALSE) #Ensures that row indices are not written into the output file.
+car_data <- load_car_data(opt$output_path)
 
 print("Read in car dataset successfully")
 
