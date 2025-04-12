@@ -125,11 +125,12 @@ head(unique_occurences)
 
 ### **EDA Analysis - Visualization**
 
-![Distribution of Buying Price by Safety Level](../output/eda_summary_buying_safety.png){#fig-buy} 
+![Distribution of Buying Price by Safety Level](../output/eda_summary_buying_safety.png){#fig-buy height="300px"}
 
-![Distribution of Number of Persons by Safety Level](../output/eda_summary_persons_safety.png){#fig-num}
+![Distribution of Number of Persons by Safety Level](../output/eda_summary_persons_safety.png){#fig-num height="300px"}
 
-![Distribution of Maintenance Cost by Safety Level](../output/eda_summary_maint_safety.png){#fig-main}
+![Distribution of Maintenance Cost by Safety Level](../output/eda_summary_maint_safety.png){#fig-main height="300px"}
+
 
 **Histograms of Safety Across 3 Input Variables: Buying Price, Capacity (Number of Persons), and Maintenance Cost**
 
@@ -160,6 +161,16 @@ model_metrics
 
 The final kNN model achieved `r test_accuracy`% accuracy, which is somewhat reflective of the CV accuracy of `r best_cv_accuracy`%. This is not a great accuracy, but it's better than random guessing, which would be `r rand`%.
 
+### **Why We Chose k-Nearest Neighbors (kNN)**
+
+We selected the k-Nearest Neighbors (kNN) algorithm for this project because of its simplicity, interpretability, and suitability for categorical classification tasks. The structure of the Car Evaluation Dataset—being fully categorical and relatively low-dimensional—aligns well with kNN’s requirements, especially after converting the categorical variables into ordinal numeric values.
+
+kNN does not make any assumptions about the underlying distribution of the data, making it an effective non-parametric approach for our exploratory analysis. Since our goal was to explore whether safety levels could be inferred from various car attributes like price, maintenance cost, and passenger capacity, kNN allowed us to leverage feature similarity directly without imposing a specific functional form.
+
+Furthermore, kNN serves as a strong baseline model in machine learning pipelines. Its performance provides an intuitive benchmark before exploring more complex models such as decision trees or ensemble methods. By evaluating how well kNN classifies based purely on feature proximity, we gain insight into how much structure or separability exists in the encoded feature space.
+
+Ultimately, kNN provided a useful starting point that balances model transparency with classification ability, helping to assess whether feature similarity alone is sufficient to infer car safety levels.
+
 ### **Visualization of Analysis**
 
 Since we are using multiple input variables for our kNN classification, it wouldn't be possible to graph it out 2D. We will do a **confusion matrix** as our visualization.
@@ -169,6 +180,8 @@ Since we are using multiple input variables for our kNN classification, it would
 ```{r, echo=FALSE}
 #| label: fig-conf
 #| fig-cap: "Confusion Matrix to Evaluate Model Performance"
+#| out-width: "50%"
+#| out-height: "400px"
 knitr::include_graphics("../output/knn_model_confusion_matrix.png")
 ```
 
