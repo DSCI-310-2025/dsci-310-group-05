@@ -3,18 +3,27 @@ library(readr)
 library(janitor)
 library(testthat)
 
-# Load the UCI dataset from web.
+# Documentation for command line usage
+doc <- "
+This script loads the Car Evaluation dataset from the UCI website,
+cleans the column names, and saves it as a CSV file.
 
-# Downloads the Car Evaluation dataset from the UCI Machine Learning Repository, assigns column names, 
-# saves the dataset as a CSV file, and returns the dataset to according to the output path.
+Usage:
+  01-load_data_from_web.R --output_path=<output_path>
+"
 
+# Parse command line options
+opt <- docopt(doc)
+
+#' Load and clean the UCI Car Evaluation dataset, then save it.
+#'
 #' @param output_path A string specifying the file path to save the cleaned CSV dataset.
-#' 
+#' @return A tibble containing the cleaned dataset.
+#'
 #' @examples
 #' \dontrun{
-#' cleaned_data <- load_car_data(file_path = NULL, output_path = "..")
+#' load_car_data(output_path = "data/original/car_data.csv")
 #' }
-
 load_car_data <- function(output_path) {
   url <- "https://archive.ics.uci.edu/ml/machine-learning-databases/car/car.data"
   
@@ -37,4 +46,10 @@ load_car_data <- function(output_path) {
   
   return(car_data)
 }
+
+# Run the function with the command line argument
+car_data <- load_car_data(opt$output_path)
+
+
+print("🚗 Car dataset loaded")
 
