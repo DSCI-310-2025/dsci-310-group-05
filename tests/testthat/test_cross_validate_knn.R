@@ -11,18 +11,21 @@ df <- tibble::tibble(
 split <- split_data(df)
 
 test_that("cross_validate_knn returns increasing k values and reasonable accuracy", {
-  results <- suppressWarnings(cross_validate_knn(split$train_x, split$train_y, k_values = c(1, 5, 9)))
+  results1 <- suppressWarnings(cross_validate_knn(split$train_x, split$train_y, k_values = c(1, 5, 9)))
+  results2 <- suppressWarnings(cross_validate_knn(split$train_x, split$train_y, k_values = c(3, 7)))
 
-  expect_equal(nrow(results), 3)
-  expect_true(all(results$k %in% c(1, 5, 9)))
-  expect_true(all(results$accuracy >= 0 & results$accuracy <= 1))
-  expect_equal(results$k[1], 1)
+  expect_equal(nrow(results1), 3)
+  expect_true(all(results1$k %in% c(1, 5, 9)))
+  expect_true(all(results1$accuracy >= 0 & results1$accuracy <= 1))
+  expect_equal(results1$k[1], 1)
+
+  expect_equal(nrow(results2), 2)
+  expect_true(all(results2$k %in% c(3, 7)))
 })
 
 test_that("cross_validate_knn fails gracefully with empty input", {
   expect_error(
     cross_validate_knn(data.frame(), factor()),
-    "nrow\\(x\\) > 1 is not TRUE"  # escape parentheses
+    "nrow\\(x\\) > 1 is not TRUE"
   )
 })
-

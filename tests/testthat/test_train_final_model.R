@@ -12,12 +12,15 @@ df <- tibble::tibble(
 split <- split_data(df)
 
 test_that("train_final_model returns model with correct k and structure", {
-  model <- suppressWarnings(train_final_model(split$train_x, split$train_y, best_k = 5))
+  model_5 <- suppressWarnings(train_final_model(split$train_x, split$train_y, best_k = 5))
+  model_3 <- suppressWarnings(train_final_model(split$train_x, split$train_y, best_k = 3))
 
-  expect_s3_class(model, "train")
-  expect_equal(model$method, "knn")
-  expect_equal(model$bestTune$k, 5)
-  expect_true("Accuracy" %in% colnames(model$results))
+  expect_s3_class(model_5, "train")
+  expect_equal(model_5$method, "knn")
+  expect_equal(model_5$bestTune$k, 5)
+  expect_true("Accuracy" %in% colnames(model_5$results))
+
+  expect_equal(model_3$bestTune$k, 3)  # second valid test
 })
 
 test_that("train_final_model fails when k is missing or invalid", {
