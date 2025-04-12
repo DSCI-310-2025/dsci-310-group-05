@@ -45,9 +45,11 @@ cd dsci-310-group-05/
 
 `docker-compose up --build -d`
 
-4. **Access Jupyter Notebook:**
+4. **Access RStudio:**
 
-- Run `localhost:8888` on your browser.
+- Run `http://localhost:8787` on your browser.
+   Username: rstudio
+   Password: password
 - Then, you can run the analysis in the Jupyter Notebook.
 
 ### Alternative: Run the Pre-Built Docker Image (Recommended)
@@ -61,9 +63,11 @@ If you don't want to build the container manually, you can use our pre-built ima
 
  `docker run -it --rm -p 8787:8787 -p 8888:8888 kevinl002/dsci-310-group-05-container:latest` in terminal
 
-3. **Access Jupyter Notebook:**:
+3. **Access RStudio:**:
 
-- Again run: `http://localhost:8888` on your browser to access the analysis in Jupyter Notebook
+- Again run: `http://localhost:8787` on your browser to access the analysis in RStudio
+   Username: rstudio
+   Password: password
 
 ### DockerHub Repository
 You can find our Docker images here:  
@@ -84,6 +88,8 @@ You can find our Docker images here:
 - tidyr
 - caret
 - class
+- testthat
+- devtools
 
 ## Makefile Overview
 
