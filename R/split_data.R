@@ -6,6 +6,16 @@
 #'
 #' @return A list with train_x, train_y, test_x, test_y.
 #' @export
+#' 
+#' @examples
+#' df <- data.frame(
+#'   feature1 = rnorm(100),
+#'   feature2 = rnorm(100),
+#'   safety = sample(c("low", "med", "high"), 100, replace = TRUE)
+#' )
+#' split <- split_data(df, response_col = "safety", prop = 0.75)
+#' names(split)
+#' # Returns: "train_x", "train_y", "test_x", "test_y"
 split_data <- function(data, response_col = "safety", prop = 0.8) {
   if (!(response_col %in% colnames(data))) {
     stop(paste("Response column", response_col, "not found in data."))

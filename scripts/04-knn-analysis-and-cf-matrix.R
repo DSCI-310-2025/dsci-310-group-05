@@ -8,6 +8,11 @@ library(readr)
 source("R/calculate_random_baseline.R")
 source("R/cross_validate_knn.R")
 source("R/train_final_model.R")
+source("R/compute_test_accuracy.R")
+source("R/plot_conf_matrix.R")
+source("R/split_data.R")
+
+
 
 doc <- "
 Modeling Script
@@ -28,14 +33,13 @@ car_data_prepared <- car_data_encoded %>%
   mutate(safety = as.factor(safety))
 
 # Split into training and testing
-train_index <- createDataPartition(car_data_prepared$safety, p = 0.8, list = FALSE)
-train_data <- car_data_prepared[train_index, ]
-test_data <- car_data_prepared[-train_index, ]
+split <- split_data(car_data_prepared, response_col = "safety", prop = 0.8)
 
-train_x <- train_data %>% select(-safety)
-train_y <- train_data$safety
-test_x <- test_data %>% select(-safety)
-test_y <- test_data$safety
+train_x <- split$train_x
+train_y <- split$train_y
+test_x  <- split$test_x
+test_y  <- split$test_y
+
 
 # Performing cross validation with various k values
 cv_results <- cross_validate_knn(train_x, train_y, k_values = seq(1, 21, 2))
@@ -49,7 +53,7 @@ final_knn_model <- train_final_model(train_x, train_y, best_k)
 
 # Predictions
 predictions <- predict(final_knn_model, test_x)
-test_accuracy <- sum(predictions == test_y) / length(test_y)
+test_accuracy <- compute_test_accuracy(predictions, test_y)
 
 # Baseline accuracy (random guessing)
 rand <- calculate_random_baseline(test_y)
@@ -70,13 +74,7 @@ conf_matrix_df <- as.data.frame(conf_matrix$table)
 colnames(conf_matrix_df) <- c("True_Label", "Predicted_Label", "Count")
 
 # Plot confusion matrix
-p <- ggplot(conf_matrix_df, aes(x = Predicted_Label, y = True_Label, fill = Count)) +
-  geom_tile() +
-  geom_text(aes(label = Count), color = "white", size = 6) +
-  scale_fill_gradient(low = "lightblue", high = "blue") +
-  labs(title = "Confusion Matrix for kNN Classification",
-       x = "Predicted Label", y = "True Label", fill = "Count") +
-  theme_minimal()
+p <- plot_conf_matrix(test_y, predictions, title = "Confusion Matrix for kNN Classification")
 
 ggsave(paste0(opt$output_prefix, "_confusion_matrix.png"), plot = p, width = 7, height = 5)
 

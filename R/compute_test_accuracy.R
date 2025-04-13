@@ -6,6 +6,11 @@
 #' @param actual A vector of true class labels.
 #'
 #' @return A numeric value between 0 and 1 representing the test accuracy.
+#' @examples
+#' predicted <- c("yes", "no", "yes", "yes")
+#' actual <- c("yes", "no", "no", "yes")
+#' compute_test_accuracy(predicted, actual)
+#' # Returns 0.75
 #' @export
 
 compute_test_accuracy <- function(predicted, actual) {

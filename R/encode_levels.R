@@ -2,8 +2,15 @@
 #'
 #' @param x A character vector to encode.
 #' @return A numeric vector representing encoded values.
+#' @examples
+#' encode_levels(c("low", "med", "high", "vhigh", "acc", "vgood", "3"))
+#' # Returns: 1, 2, 3, 4, 2, 4, 3
 #' @export
 encode_levels <- function(x) {
+  if (!is.character(x)) {
+    stop("Input must be a character vector.")
+  }
+  
   dplyr::case_when(
     x == "vhigh"  ~ 4,
     x == "high"   ~ 3,

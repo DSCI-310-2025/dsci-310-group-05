@@ -30,6 +30,6 @@ test_that("count_unique_values works with missing values", {
   expect_equal(result$Count[result$Variable == "b" & is.na(result$Value)], 1)
 })
 
-
-
-
+test_that("count_unique_values throws an error for non-data frame input", {
+  expect_error(count_unique_values("not a dataframe"), "data frame")
+})

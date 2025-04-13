@@ -8,6 +8,10 @@
 #'
 #' @return A ggplot object representing the confusion matrix heatmap.
 #' @export
+#' @examples
+#' true <- factor(c("yes", "no", "yes", "no", "yes"))
+#' predicted <- factor(c("yes", "no", "no", "no", "yes"))
+#' plot_conf_matrix(true, predicted)
 plot_conf_matrix <- function(true_labels, predicted_labels, title = "Confusion Matrix") {
   # Ensure both are factors with the same levels
   common_levels <- union(levels(factor(true_labels)), levels(factor(predicted_labels)))

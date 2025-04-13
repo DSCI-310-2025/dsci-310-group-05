@@ -26,6 +26,6 @@ test_that("cross_validate_knn returns increasing k values and reasonable accurac
 test_that("cross_validate_knn fails gracefully with empty input", {
   expect_error(
     cross_validate_knn(data.frame(), factor()),
-    "nrow\\(x\\) > 1 is not TRUE"
+    "train_x and train_y must not be empty"
   )
 })

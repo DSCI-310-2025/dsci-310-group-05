@@ -4,6 +4,13 @@ library(dplyr)
 library(tidyr)
 library(readr)
 
+source("R/count_unique_values.R")
+source("R/decode_categorical_features.R")
+source("R/plot_distribution.R")
+source("R/summarize_data.R")
+
+
+
 doc <- "
 Exploratory Data Analysis Script
 
@@ -18,26 +25,18 @@ opt <- docopt(doc)
 car_data_encoded <- read.csv(opt$input_file)
 
 # Summary statistics
-summary(car_data_encoded)
+summarize_data(car_data_encoded)
+
 
 # Count occurrences for each unique value in each column
-unique_occurences <- car_data_encoded %>%
-  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
-  group_by(Variable, Value) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  arrange(Variable, desc(Count))
+unique_occurences <- count_unique_values(car_data_encoded)
+
 
 write_csv(unique_occurences, "output/eda_summary/unique_occurences.csv")
 
 # Convert encoded variables back to categorical labels
-car_data_labeled <- car_data_encoded %>%
-  mutate(
-    buying = factor(buying, levels = c(1, 2, 3, 4), labels = c("low", "med", "high", "vhigh")),
-    maint = factor(maint, levels = c(1, 2, 3, 4), labels = c("low", "med", "high", "vhigh")),
-    persons = factor(persons, levels = c(2, 4, 5), labels = c("2", "4", "5+")), 
-    class = factor(class, levels = c(1, 2, 3, 4), labels = c("unacc", "acc", "good", "vgood")),
-    safety = as.factor(safety)
-  )
+car_data_labeled <- decode_categorical_features(car_data_encoded)
+
 
 # Define a larger theme for plots
 larger_theme <- theme(
@@ -49,27 +48,31 @@ larger_theme <- theme(
 )
 
 # Plot 1: Distribution of Buying Price by Safety Level
-p1 <- ggplot(car_data_labeled, aes(x = buying, fill = safety)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Distribution of Buying Price by Safety Level", 
-       x = "Buying Price", y = "Count", fill = "Safety Level") +
-  theme_minimal() + larger_theme
-ggsave(file.path("output", paste0(basename(opt$output_prefix), "_buying_safety.png")), plot = p1)
+plot_distribution(
+  data = car_data_labeled,
+  x_var = "buying",
+  fill_var = "safety",
+  title = "Distribution of Buying Price by Safety Level",
+  output_path = file.path("output", paste0(basename(opt$output_prefix), "_buying_safety.png"))
+)
 
 # Plot 2: Distribution of Number of Persons by Safety Level
-p2 <- ggplot(car_data_labeled, aes(x = persons, fill = safety)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Distribution of Number of Persons by Safety Level", 
-       x = "Number of Persons", y = "Count", fill = "Safety Level") +
-  theme_minimal() + larger_theme
-ggsave(file.path("output", paste0(basename(opt$output_prefix), "_persons_safety.png")), plot = p2)
+plot_distribution(
+  data = car_data_labeled,
+  x_var = "persons",
+  fill_var = "safety",
+  title = "Distribution of Number of Persons by Safety Level",
+  output_path = file.path("output", paste0(basename(opt$output_prefix), "_persons_safety.png"))
+)
+
 
 # Plot 3: Distribution of Maintenance Cost by Safety Level
-p3 <- ggplot(car_data_labeled, aes(x = maint, fill = safety)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Distribution of Maintenance Cost by Safety Level", 
-       x = "Maintenance Cost", y = "Count", fill = "Safety Level") +
-  theme_minimal() + larger_theme
-ggsave(file.path("output", paste0(basename(opt$output_prefix), "_maint_safety.png")), plot = p3)
+plot_distribution(
+  data = car_data_labeled,
+  x_var = "maint",
+  fill_var = "safety",
+  title = "Distribution of Maintenance Cost by Safety Level",
+  output_path = file.path("output", paste0(basename(opt$output_prefix), "_maint_safety.png"))
+)
 
 print("Exploratory Data Analysis Completed!")
