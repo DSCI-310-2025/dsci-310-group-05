@@ -3,12 +3,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(readr)
-
-source("R/count_unique_values.R")
-source("R/decode_categorical_features.R")
-source("R/plot_distribution.R")
-source("R/summarize_data.R")
-
+library(carpackage)
 
 
 doc <- "
