@@ -6,6 +6,14 @@ library(ggplot2)
 library(janitor)
 library(pointblank)
 
+source("R/clean_column_names.R")
+source("R/check_data_quality.R")
+source("R/encode_levels.R")
+source("R/encode_safety.R")
+source("R/save_cleaned_data.R")
+
+
+
 doc <- "
 Data Cleaning Script
 
@@ -18,11 +26,8 @@ opt <- docopt(doc)
 # Load data
 car_data <- readr::read_csv(opt$input_file)
 
-# Clean column names
-car_data <- janitor::clean_names(car_data)
-
-# Assign expected column names
-colnames(car_data) <- c("buying", "maint", "doors", "persons", "lug_boot", "safety", "class")
+# Clean and standardize column names
+car_data <- clean_column_names(car_data)
 
 # ==== Data Validation ====
 
@@ -48,70 +53,18 @@ if (!all_passed(validation_results)) {
 }
 
 # ==== Cleaning Process ====
+car_data <- check_data_quality(car_data)
 
-# Count missing values and duplicate rows (for Quarto report)
-num_missing <- sum(is.na(car_data))
-num_duplicates <- nrow(car_data) - nrow(distinct(car_data))
-
-nan_summary <- data.frame(
-  Metric = c("Missing Values", "Duplicate Rows"),
-  Count = c(num_missing, num_duplicates)
-)
-write_csv(nan_summary, "data/clean/nan_and_duplicates_summary.csv")
-
-# Remove duplicate rows
-car_data <- car_data %>% distinct()
 
 # ==== Encoding ====
-
-# General encoding for categorical variables
-encode_levels <- function(x) {
-  dplyr::case_when(
-    x == "vhigh"  ~ 4,
-    x == "high"   ~ 3,
-    x == "med"    ~ 2, 
-    x == "low"    ~ 1,
-    x == "big"    ~ 3,
-    x == "small"  ~ 1,
-    x == "more"   ~ 5,
-    x == "5more"  ~ 5,
-    x == "2"      ~ 2,
-    x == "3"      ~ 3,
-    x == "4"      ~ 4,
-    x == "unacc"  ~ 1,
-    x == "acc"    ~ 2,
-    x == "good"   ~ 3,
-    x == "vgood"  ~ 4,
-    TRUE          ~ as.numeric(x)
-  )
-}
-
-# Special encoding for safety
-encode_safety <- function(x) {
-  dplyr::case_when(
-    x == "low"  ~ 1,
-    x == "med"  ~ 2,
-    x == "high" ~ 3,
-    TRUE        ~ as.numeric(x)
-  )
-}
 
 # Apply encodings
 car_data_clean <- car_data %>%
   mutate(across(-safety, encode_levels)) %>%
   mutate(safety = encode_safety(safety))
 
-# Ensure the "data/clean/" directory exists before saving the file
-output_file <- "data/clean/car_clean.csv"  # Define output file path
-output_dir <- dirname(output_file)  # Extract directory path
+#save the cleaned data
+save_cleaned_data(car_data_clean, opt$output_file)
 
-# Ensure output directory exists
-output_dir <- dirname(opt$output_file)
-if (!dir.exists(output_dir)) {
-  dir.create(output_dir, recursive = TRUE)
-}
-
-# Save cleaned dataset
-write.csv(car_data_clean, opt$output_file, row.names = FALSE)
 
 print("The data is cleaned, validated, and ready for EDA!")

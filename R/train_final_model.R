@@ -6,6 +6,11 @@
 #'
 #' @return Trained kNN model.
 #' @export
+#' 
+#' @examples
+#' df <- data.frame(x1 = rnorm(50), x2 = rnorm(50))
+#' y <- factor(sample(c("yes", "no"), 50, replace = TRUE))
+#' model <- train_final_model(df, y, best_k = 5)
 train_final_model <- function(train_x, train_y, best_k) {
   if (!is.numeric(best_k) || is.na(best_k) || length(best_k) != 1) {
     stop("best_k must be a single numeric value.")

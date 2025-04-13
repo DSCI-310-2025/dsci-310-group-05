@@ -3,6 +3,15 @@
 #' Converts numerical encodings of categorical features back to labels.
 #' @param data A data frame with encoded categorical variables.
 #' @return A transformed data frame with categorical labels.
+#' @examples
+#' df <- data.frame(
+#'   buying = c(1, 2, 3, 4),
+#'   maint = c(4, 3, 2, 1),
+#'   persons = c(2, 4, 5, 2),
+#'   class = c(1, 2, 3, 4),
+#'   safety = c("low", "med", "high", "low")
+#' )
+#' decode_categorical_features(df)
 #' @export
 decode_categorical_features <- function(data) {
   if (!is.data.frame(data)) {

@@ -10,11 +10,25 @@
 #'
 #' @return A ggplot object representing the distribution plot.
 #' @export
+#' @examples
+#' df <- data.frame(
+#'   class = c("acc", "acc", "unacc", "unacc", "good"),
+#'   safety = c("low", "med", "low", "high", "med")
+#' )
+#' plot_distribution(df, x_var = "class", fill_var = "safety", title = "Class by Safety")
 plot_distribution <- function(data, x_var, fill_var, title, output_path = NULL) {
   if (!is.data.frame(data)) stop("Input `data` must be a data frame.")
   if (is.null(x_var) || is.null(fill_var)) stop("x_var and fill_var must be provided.")
   if (!x_var %in% names(data)) stop("x_var not found in data.")
   if (!fill_var %in% names(data)) stop("fill_var not found in data.")
+  if (!is.factor(data[[x_var]]) && !is.character(data[[x_var]])) {
+  stop("x_var must be a categorical variable (factor or character).")
+}
+
+if (!is.factor(data[[fill_var]]) && !is.character(data[[fill_var]])) {
+  stop("fill_var must be a categorical variable (factor or character).")
+}
+
   
   p <- ggplot2::ggplot(data, ggplot2::aes(x = !!rlang::sym(x_var), fill = !!rlang::sym(fill_var))) +
     ggplot2::geom_bar(position = "dodge") +

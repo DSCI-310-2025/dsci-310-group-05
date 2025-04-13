@@ -185,22 +185,42 @@ While individual variables may not show a strong distinction in safety levels on
 #| label: tbl-knn-metrics
 #| tbl-cap: "kNN Model Performance Metrics"
 
-splitted_data = split_data(car_data_clean, response_col = "safety", prop = 0.8)
-model_metrics <- cross_validate_knn(train_x = splitted_data$train_x,
-  train_y = splitted_data$train_y,
-  k_values = seq(1, 21, 2))
-best_row <- model_metrics[which.max(model_metrics$accuracy), ]
+```{r}
+```{r}
+# Convert safety to factor
+car_data_prepared <- car_data_clean %>%
+  mutate(safety = as.factor(safety))
+
+# Split into training and testing
+splitted_data <- split_data(car_data_prepared, response_col = "safety", prop = 0.8)
+train_x <- splitted_data$train_x
+train_y <- splitted_data$train_y
+test_x  <- splitted_data$test_x
+test_y  <- splitted_data$test_y
+
+# Cross-validation
+cv_results <- cross_validate_knn(train_x, train_y, k_values = seq(1, 21, 2))
+
+# Pick best k
+best_row <- cv_results[which.max(cv_results$accuracy), ]
 best_k <- best_row$k
 best_cv_accuracy <- best_row$accuracy
-final_model <- train_final_model(splitted_data$test_x, splitted_data$test_y, best_k)
-predictions <- predict(final_model, splitted_data$test_x)
-test_accuracy <- round(compute_test_accuracy(predictions, splitted_data$test_y), 2)
-rand <- round(calculate_random_baseline(splitted_data$train_y), 2)
 
-model_metrics
+# Train final model
+final_model <- train_final_model(train_x, train_y, best_k)
+
+# Predict on test set
+predictions <- predict(final_model, test_x)
+
+# Calculate accuracy
+test_accuracy <- round(compute_test_accuracy(predictions, test_y), 2)
+rand <- round(calculate_random_baseline(test_y), 2)
+
+# Show CV results
+cv_results
 ```
 
-The final kNN model achieved `r test_accuracy`% accuracy. This is not a great accuracy, but it's better than random guessing, which would be `r rand`%.
+The final kNN model achieved around `r test_accuracy` accuracy. This is not a great accuracy, but it's better than random guessing, which would be `r rand`.
 
 ### **Why We Chose k-Nearest Neighbors (kNN)**
 
@@ -230,17 +250,17 @@ plot_conf_matrix(splitted_data$test_y, predictions, title = "Confusion Matrix")
 
 Summary statistics based on unique value counts showed that each level of most features—such as "buying," "maint," and "doors"—appeared `r unique_occurences[3, "Count"]` times, while each level of "lug_boot", "persons", and "safety" occurred `r unique_occurences[13, "Count"]` times. However, the "class" variable showed clear imbalance: the "unacc" category appeared `r unique_occurences[4, "Count"]` times, while the least frequent category, "vgood," appeared only `r unique_occurences[7, "Count"]` times. Since "class" was not the target variable in the kNN analysis, this imbalance did not affect model training.
 
-Exploratory Data Analysis (EDA) using histograms showed that "safety" levels (low, medium, high) were evenly distributed across "buying," "persons," and "maint," indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict "safety" using other features, achieved a final accuracy of `r test_accuracy`% with an optimal k of `r best_k`, surpassing random guessing (`r rand`% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.
+Exploratory Data Analysis (EDA) using histograms showed that "safety" levels (low, medium, high) were evenly distributed across "buying," "persons," and "maint," indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict "safety" using other features, achieved a final accuracy of `r test_accuracy` with an optimal k of `r best_k`, surpassing random guessing (`r rand` for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.
 
 The dataset’s cleanliness and balanced feature distributions partially aligned with expectations, given its UCI origin, known for structured datasets. The absence of missing values and duplicates was anticipated, simplifying preprocessing. However, the uniform distribution of "safety" across individual features was unexpected. Real-world data might show biases—e.g., higher safety with lower buying prices or higher maintenance costs due to safety features—yet this dataset lacked such trends, possibly indicating synthetic balancing for algorithmic testing.
 
-The kNN accuracy of `r test_accuracy`% was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase to `r best_cv_accuracy`% from `r test_accuracy`% with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.
+The kNN accuracy of `r test_accuracy` was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy change to `r best_cv_accuracy` from `r test_accuracy` with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.
 
 ### **Potential Impact**
 
 These results have practical and methodological implications. The preprocessing and encoding workflow offers a replicable approach for handling ordinal categorical data, applicable to fields like healthcare or marketing. The balanced predictors ensure unbiased model training, making this dataset a fair benchmark for algorithmic evaluation.
 
-However, the kNN’s `r test_accuracy`% accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.
+However, the kNN’s `r test_accuracy` accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.
 
 ### **Future Questions**
 

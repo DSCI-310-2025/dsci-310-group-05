@@ -4,12 +4,17 @@
 #' @param data A data frame.
 #' @return A data frame with columns: Variable, Value, Count.
 #' @export
-#' Count unique values in each column
 #'
-#' @param df A data frame
-#' @return A data frame with counts of unique values per column
-#' @export
+#' @examples
+#' df <- data.frame(
+#'   A = c("x", "y", "x"),
+#'   B = c("a", "a", "b")
+#' )
+#' count_unique_values(df)
 count_unique_values <- function(df) {
+  if (!is.data.frame(df)) {
+    stop("❌ Input must be a data frame.")
+  }
   df[] <- lapply(df, as.character)  # 👈 force all columns to same type
   df %>%
     tidyr::pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
