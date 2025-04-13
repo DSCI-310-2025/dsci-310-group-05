@@ -78,7 +78,6 @@ Although the dataset comes with predefined columns, it does not include column n
 ```{r, echo=FALSE}
 #| label: tbl-col
 #| tbl-cap: "Assigning the column names"
-
 col_car_data <- clean_column_names(car_data)
 head(col_car_data)
 ```
@@ -142,7 +141,6 @@ head(unique_occurences)
 **Our x and y variables all have sufficient data points for analysis!**
 
 ### **EDA Analysis - Visualization**
-
 ```{r, echo=FALSE}
 # Prepare for plotting
 car_data_plot <- decode_categorical_features(car_data_clean)
@@ -203,6 +201,16 @@ model_metrics
 ```
 
 The final kNN model achieved `r test_accuracy`% accuracy. This is not a great accuracy, but it's better than random guessing, which would be `r rand`%.
+
+### **Why We Chose k-Nearest Neighbors (kNN)**
+
+We selected the k-Nearest Neighbors (kNN) algorithm for this project because of its simplicity, interpretability, and suitability for categorical classification tasks. The structure of the Car Evaluation Dataset—being fully categorical and relatively low-dimensional—aligns well with kNN’s requirements, especially after converting the categorical variables into ordinal numeric values.
+
+kNN does not make any assumptions about the underlying distribution of the data, making it an effective non-parametric approach for our exploratory analysis. Since our goal was to explore whether safety levels could be inferred from various car attributes like price, maintenance cost, and passenger capacity, kNN allowed us to leverage feature similarity directly without imposing a specific functional form.
+
+Furthermore, kNN serves as a strong baseline model in machine learning pipelines. Its performance provides an intuitive benchmark before exploring more complex models such as decision trees or ensemble methods. By evaluating how well kNN classifies based purely on feature proximity, we gain insight into how much structure or separability exists in the encoded feature space.
+
+Ultimately, kNN provided a useful starting point that balances model transparency with classification ability, helping to assess whether feature similarity alone is sufficient to infer car safety levels.
 
 ### **Visualization of Analysis**
 
