@@ -18,22 +18,7 @@ execute:
 
 ```{r, echo=FALSE}
 library(tidyverse)
-source("../R/calculate_random_baseline.R")
-source("../R/clean_column_names.R")
-source("../R/count_unique_values.R")
-source("../R/cross_validate_knn.R")
-source("../R/decode_categorical_features.R")
-source("../R/encode_levels.R")
-source("../R/encode_safety.R")
-source("../R/load_car_data.R")
-source("../R/plot_distribution.R")
-source("../R/save_cleaned_data.R")
-source("../R/split_data.R")
-source("../R/summarize_data.R")
-source("../R/train_final_model.R")
-source("../R/check_data_quality.R")
-source("../R/compute_test_accuracy.R")
-source("../R/plot_conf_matrix.R")
+library(carpackage)
 ```
 
 ## **Summary**

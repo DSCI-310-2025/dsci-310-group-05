@@ -4,14 +4,7 @@ library(caret)
 library(ggplot2)
 library(dplyr)
 library(readr)
-
-source("R/calculate_random_baseline.R")
-source("R/cross_validate_knn.R")
-source("R/train_final_model.R")
-source("R/compute_test_accuracy.R")
-source("R/plot_conf_matrix.R")
-source("R/split_data.R")
-
+library(carpackage)
 
 
 doc <- "

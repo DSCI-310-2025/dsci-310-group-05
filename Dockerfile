@@ -30,7 +30,8 @@ RUN R -e "install.packages('remotes', repos='https://cran.r-project.org')" && \
     R -e "remotes::install_version('readr', version='2.1.5', repos='https://cran.r-project.org')" && \
     R -e "remotes::install_version('testthat', version='3.1.10', repos='https://cran.r-project.org')" && \
     R -e "remotes::install_version('devtools', version='2.4.5', repos='https://cran.r-project.org')" && \
-    R -e "remotes::install_version('pointblank', version='0.10.0', repos='https://cran.r-project.org')"
+    R -e "remotes::install_version('pointblank', version='0.10.0', repos='https://cran.r-project.org')" && \
+    R -e "remotes::install_github('DSCI-310-2025/carpackage')"
 
 
 # Expose ports for RStudio (8787) and Jupyter Notebook (8888)

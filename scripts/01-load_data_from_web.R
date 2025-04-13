@@ -1,9 +1,7 @@
 library(docopt)
 library(readr)
 library(janitor)
-
-# Source the function
-source("R/load_car_data.R")
+library(carpackage)
 
 doc <- "
 This script loads in the data from the UCI website.

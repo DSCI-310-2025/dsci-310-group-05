@@ -5,14 +5,7 @@ library(readr)
 library(ggplot2)
 library(janitor)
 library(pointblank)
-
-source("R/clean_column_names.R")
-source("R/check_data_quality.R")
-source("R/encode_levels.R")
-source("R/encode_safety.R")
-source("R/save_cleaned_data.R")
-
-
+library(carpackage)
 
 doc <- "
 Data Cleaning Script
