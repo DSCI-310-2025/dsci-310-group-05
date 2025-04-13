@@ -5,7 +5,7 @@ pkgs <- list(
   IRkernel = "1.3",
   class = "7.3-22",
   caret = "7.0.1",
-  kknn = "1.3.2",
+  kknn = "1.3.1",
   dplyr = "1.1.4",
   ggplot2 = "3.5.1",
   tidyr = "1.3.1",
