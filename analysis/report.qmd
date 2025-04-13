@@ -18,6 +18,22 @@ execute:
 
 ```{r, echo=FALSE}
 library(tidyverse)
+source("../R/calculate_random_baseline.R")
+source("../R/clean_column_names.R")
+source("../R/count_unique_values.R")
+source("../R/cross_validate_knn.R")
+source("../R/decode_categorical_features.R")
+source("../R/encode_levels.R")
+source("../R/encode_safety.R")
+source("../R/load_car_data.R")
+source("../R/plot_distribution.R")
+source("../R/save_cleaned_data.R")
+source("../R/split_data.R")
+source("../R/summarize_data.R")
+source("../R/train_final_model.R")
+source("../R/check_data_quality.R")
+source("../R/compute_test_accuracy.R")
+source("../R/plot_conf_matrix.R")
 ```
 
 ## **Summary**
@@ -51,7 +67,7 @@ The dataset was retrieved from an online source and loaded into R for analysis u
 ```{r, echo=FALSE}
 #| label: tbl-data
 #| tbl-cap: "Data-Preview"
-car_data <- read_csv("../data/original/car_data.csv")
+car_data <- load_car_data("../data/original/car_data.csv")
 
 # Display first few rows
 head(car_data)
@@ -62,8 +78,7 @@ Although the dataset comes with predefined columns, it does not include column n
 ```{r, echo=FALSE}
 #| label: tbl-col
 #| tbl-cap: "Assigning the column names"
-
-col_car_data <- read_csv("../data/clean/car_clean.csv")
+col_car_data <- clean_column_names(car_data)
 head(col_car_data)
 ```
 
@@ -71,7 +86,7 @@ head(col_car_data)
 #| label: tbl-nan
 #| tbl-cap: "Count of Missing and Duplicate Values"
 # Print the table
-nan_and_duplicates_summary <- read_csv("../data/clean/nan_and_duplicates_summary.csv")
+nan_and_duplicates_summary <- check_data_quality(car_data)
 head(nan_and_duplicates_summary)
 ```
 
@@ -85,7 +100,9 @@ Since k-Nearest Neighbors (kNN) is a distance-based algorithm, it requires numer
 #| label: tbl-enc
 #| tbl-cap: "Car Data Encoded"
 
-car_data_clean <- read_csv("../data/clean/car_clean.csv")
+car_data_clean <- car_data %>%
+  mutate(across(-safety, encode_levels)) %>%
+  mutate(safety = encode_safety(safety))
 
 # Display first few rows
 head(car_data_clean)
@@ -108,14 +125,14 @@ head(car_data_clean)
 ```{r, echo=FALSE}
 #| label: tbl-sum
 #| tbl-cap: "Summary Statistics"
-summary(car_data_clean)
+summarize_data(car_data_clean)
 ```
 
 ```{r, echo=FALSE}
 #| label: tbl-cnt
 #| tbl-cap: "Unique Occurrences Count"
 # Count occurrences for each unique value in each column
-unique_occurences <- read_csv("../output/eda_summary/unique_occurences.csv")
+unique_occurences <- count_unique_values(car_data_clean)
 head(unique_occurences)
 ```
 
@@ -124,13 +141,31 @@ head(unique_occurences)
 **Our x and y variables all have sufficient data points for analysis!**
 
 ### **EDA Analysis - Visualization**
+```{r, echo=FALSE}
+# Prepare for plotting
+car_data_plot <- decode_categorical_features(car_data_clean)
+```
 
-![Distribution of Buying Price by Safety Level](../output/eda_summary_buying_safety.png){#fig-buy height="300px"}
+```{r, echo = FALSE}
+#| label: fig-buy
+#| tbl-cap: "Distribution of Buying Price by Safety Level"
+plot_distribution(car_data_plot, x_var = "buying", fill_var = 'safety',
+                  title = "Distribution of Buying Price by Safety Level")
+```
 
-![Distribution of Number of Persons by Safety Level](../output/eda_summary_persons_safety.png){#fig-num height="300px"}
+```{r, echo = FALSE}
+#| label: fig-num
+#| tbl-cap: "Distribution of Number of Persons by Safety Level"
+plot_distribution(car_data_plot, x_var = "persons", fill_var = 'safety',
+                  title = "Distribution of Number of Persons by Safety Level")
+```
 
-![Distribution of Maintenance Cost by Safety Level](../output/eda_summary_maint_safety.png){#fig-main height="300px"}
-
+```{r, echo = FALSE}
+#| label: fig-main
+#| tbl-cap: "Distribution of Maintenance Cost by Safety Level"
+plot_distribution(car_data_plot, x_var = "maint", fill_var = 'safety',
+                  title = "Distribution of Maintenance Cost by Safety Level")
+```
 
 **Histograms of Safety Across 3 Input Variables: Buying Price, Capacity (Number of Persons), and Maintenance Cost**
 
@@ -150,16 +185,22 @@ While individual variables may not show a strong distinction in safety levels on
 #| label: tbl-knn-metrics
 #| tbl-cap: "kNN Model Performance Metrics"
 
-model_metrics <- read_csv("../output/knn_model_metrics.csv")
-best_k <- model_metrics$best_k
-best_cv_accuracy <- model_metrics$cv_accuracy
-test_accuracy <- model_metrics$test_accuracy
-rand <- model_metrics$random_baseline
+splitted_data = split_data(car_data_clean, response_col = "safety", prop = 0.8)
+model_metrics <- cross_validate_knn(train_x = splitted_data$train_x,
+  train_y = splitted_data$train_y,
+  k_values = seq(1, 21, 2))
+best_row <- model_metrics[which.max(model_metrics$accuracy), ]
+best_k <- best_row$k
+best_cv_accuracy <- best_row$accuracy
+final_model <- train_final_model(splitted_data$test_x, splitted_data$test_y, best_k)
+predictions <- predict(final_model, splitted_data$test_x)
+test_accuracy <- round(compute_test_accuracy(predictions, splitted_data$test_y), 2)
+rand <- round(calculate_random_baseline(splitted_data$train_y), 2)
 
 model_metrics
 ```
 
-The final kNN model achieved `r test_accuracy`% accuracy, which is somewhat reflective of the CV accuracy of `r best_cv_accuracy`%. This is not a great accuracy, but it's better than random guessing, which would be `r rand`%.
+The final kNN model achieved `r test_accuracy`% accuracy. This is not a great accuracy, but it's better than random guessing, which would be `r rand`%.
 
 ### **Why We Chose k-Nearest Neighbors (kNN)**
 
@@ -180,9 +221,7 @@ Since we are using multiple input variables for our kNN classification, it would
 ```{r, echo=FALSE}
 #| label: fig-conf
 #| fig-cap: "Confusion Matrix to Evaluate Model Performance"
-#| out-width: "50%"
-#| out-height: "400px"
-knitr::include_graphics("../output/knn_model_confusion_matrix.png")
+plot_conf_matrix(splitted_data$test_y, predictions, title = "Confusion Matrix")
 ```
 
 ## **Discussion**
@@ -190,7 +229,6 @@ knitr::include_graphics("../output/knn_model_confusion_matrix.png")
 ### **What We Found**
 
 Summary statistics based on unique value counts showed that each level of most features—such as "buying," "maint," and "doors"—appeared `r unique_occurences[3, "Count"]` times, while each level of "lug_boot", "persons", and "safety" occurred `r unique_occurences[13, "Count"]` times. However, the "class" variable showed clear imbalance: the "unacc" category appeared `r unique_occurences[4, "Count"]` times, while the least frequent category, "vgood," appeared only `r unique_occurences[7, "Count"]` times. Since "class" was not the target variable in the kNN analysis, this imbalance did not affect model training.
-
 
 Exploratory Data Analysis (EDA) using histograms showed that "safety" levels (low, medium, high) were evenly distributed across "buying," "persons," and "maint," indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict "safety" using other features, achieved a final accuracy of `r test_accuracy`% with an optimal k of `r best_k`, surpassing random guessing (`r rand`% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.
 
