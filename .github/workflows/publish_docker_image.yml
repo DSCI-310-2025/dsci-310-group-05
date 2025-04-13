@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'Dockerfile'
+      - 'install-packages.R' 
       - .github/workflows/publish_docker_image.yml # or whatever you named the file
       - 'conda-linux-64.lock'
 
