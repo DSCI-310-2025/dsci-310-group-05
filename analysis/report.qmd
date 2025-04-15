@@ -55,27 +55,17 @@ The dataset was retrieved from an online source and loaded into R for analysis u
 car_data <- load_car_data("../data/original/car_data.csv")
 
 # Display first few rows
-head(car_data)
+print(head(car_data))
 ```
 
-Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation. @tbl-col
+Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation in @tbl-col. Note - in the pdf/html it shows up fine, but not when we actually read in the data.
 
 ```{r, echo=FALSE}
 #| label: tbl-col
 #| tbl-cap: "Assigning the column names"
 col_car_data <- clean_column_names(car_data)
-head(col_car_data)
+print(head(col_car_data))
 ```
-
-```{r, echo=FALSE}
-#| label: tbl-nan
-#| tbl-cap: "Count of Missing and Duplicate Values"
-# Print the table
-nan_and_duplicates_summary <- check_data_quality(car_data)
-head(nan_and_duplicates_summary)
-```
-
-Amazing! No missing values and duplicate rows. @tbl-nan
 
 ### **Data Types**
 
@@ -134,6 +124,8 @@ car_data_plot <- decode_categorical_features(car_data_clean)
 ```{r, echo = FALSE}
 #| label: fig-buy
 #| tbl-cap: "Distribution of Buying Price by Safety Level"
+#| fig-width: 7
+#| fig-height: 6
 plot_distribution(car_data_plot, x_var = "buying", fill_var = 'safety',
                   title = "Distribution of Buying Price by Safety Level")
 ```
@@ -141,6 +133,8 @@ plot_distribution(car_data_plot, x_var = "buying", fill_var = 'safety',
 ```{r, echo = FALSE}
 #| label: fig-num
 #| tbl-cap: "Distribution of Number of Persons by Safety Level"
+#| fig-width: 7
+#| fig-height: 6
 plot_distribution(car_data_plot, x_var = "persons", fill_var = 'safety',
                   title = "Distribution of Number of Persons by Safety Level")
 ```
@@ -148,6 +142,8 @@ plot_distribution(car_data_plot, x_var = "persons", fill_var = 'safety',
 ```{r, echo = FALSE}
 #| label: fig-main
 #| tbl-cap: "Distribution of Maintenance Cost by Safety Level"
+#| fig-width: 7
+#| fig-height: 6
 plot_distribution(car_data_plot, x_var = "maint", fill_var = 'safety',
                   title = "Distribution of Maintenance Cost by Safety Level")
 ```
