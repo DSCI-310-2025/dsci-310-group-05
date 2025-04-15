@@ -164,7 +164,7 @@ Table&nbsp;1: Data-Preview
 </div>
 </figure>
 </div>
-<p>Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation. <a href="#tbl-col" class="quarto-xref">Table&nbsp;2</a></p>
+<p>Although the dataset comes with predefined columns, it does not include column names when we read in the CSV file. We manually assign meaningful column names based on the UCI dataset documentation in <a href="#tbl-col" class="quarto-xref">Table&nbsp;2</a>. Note - in the pdf/html it shows up fine, but not when we actually read in the data.</p>
 <div id="tbl-col" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-col-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -185,27 +185,6 @@ Table&nbsp;2: Assigning the column names
 </div>
 </figure>
 </div>
-<div id="tbl-nan" class="cell quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-nan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3: Count of Missing and Duplicate Values
-</figcaption>
-<div aria-describedby="tbl-nan-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 7
-  buying maint doors persons lug_boot safety class
-  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;
-1 vhigh  vhigh 2     2       small    low    unacc
-2 vhigh  vhigh 2     2       small    med    unacc
-3 vhigh  vhigh 2     2       small    high   unacc
-4 vhigh  vhigh 2     2       med      low    unacc
-5 vhigh  vhigh 2     2       med      med    unacc
-6 vhigh  vhigh 2     2       med      high   unacc</code></pre>
-</div>
-</div>
-</figure>
-</div>
-<p>Amazing! No missing values and duplicate rows. <a href="#tbl-nan" class="quarto-xref">Table&nbsp;3</a></p>
 </section>
 <section id="data-types" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="data-types"><span class="header-section-number">1.3.2</span> <strong>Data Types</strong></h3>
@@ -213,7 +192,7 @@ Table&nbsp;3: Count of Missing and Duplicate Values
 <div id="tbl-enc" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-enc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4: Car Data Encoded
+Table&nbsp;3: Car Data Encoded
 </figcaption>
 <div aria-describedby="tbl-enc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-stdout">
@@ -242,7 +221,7 @@ Table&nbsp;4: Car Data Encoded
 <div id="tbl-sum" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-sum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5: Summary Statistics
+Table&nbsp;4: Summary Statistics
 </figcaption>
 <div aria-describedby="tbl-sum-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-stdout">
@@ -267,7 +246,7 @@ Table&nbsp;5: Summary Statistics
 <div id="tbl-cnt" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-cnt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6: Unique Occurrences Count
+Table&nbsp;5: Unique Occurrences Count
 </figcaption>
 <div aria-describedby="tbl-cnt-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output cell-output-stdout">
@@ -284,7 +263,7 @@ Table&nbsp;6: Unique Occurrences Count
 </div>
 </figure>
 </div>
-<p><a href="#tbl-cnt" class="quarto-xref">Table&nbsp;6</a> provides a clearer picture of the dataset’s distribution across categorical variables. Most features—such as buying, maint, and doors—show relatively even distributions across their respective levels. Similarly, variables like safety, lug_boot, and persons appear fairly balanced across their categories, helping ensure the model does not become biased due to class imbalance in these predictors. However, the class variable is noticeably skewed, with one category representing the majority of cases while others appear far less frequently. Since this variable is not included as a target in the classification task, the imbalance does not affect the predictive modeling.</p>
+<p><a href="#tbl-cnt" class="quarto-xref">Table&nbsp;5</a> provides a clearer picture of the dataset’s distribution across categorical variables. Most features—such as buying, maint, and doors—show relatively even distributions across their respective levels. Similarly, variables like safety, lug_boot, and persons appear fairly balanced across their categories, helping ensure the model does not become biased due to class imbalance in these predictors. However, the class variable is noticeably skewed, with one category representing the majority of cases while others appear far less frequently. Since this variable is not included as a target in the classification task, the imbalance does not affect the predictive modeling.</p>
 <p><strong>Our x and y variables all have sufficient data points for analysis!</strong></p>
 </section>
 <section id="eda-analysis---visualization" class="level3" data-number="1.3.4">
@@ -343,7 +322,7 @@ Figure&nbsp;3
 <div id="tbl-knn-metrics" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-knn-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7: kNN Model Performance Metrics
+Table&nbsp;6: kNN Model Performance Metrics
 </figcaption>
 <div aria-describedby="tbl-knn-metrics-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -402,14 +381,14 @@ Figure&nbsp;4: Confusion Matrix to Evaluate Model Performance
 <section id="what-we-found" class="level3" data-number="1.4.1">
 <h3 data-number="1.4.1" class="anchored" data-anchor-id="what-we-found"><span class="header-section-number">1.4.1</span> <strong>What We Found</strong></h3>
 <p>Summary statistics based on unique value counts showed that each level of most features—such as “buying,” “maint,” and “doors”—appeared 432 times, while each level of “lug_boot”, “persons”, and “safety” occurred 576 times. However, the “class” variable showed clear imbalance: the “unacc” category appeared 432 times, while the least frequent category, “vgood,” appeared only 69 times. Since “class” was not the target variable in the kNN analysis, this imbalance did not affect model training.</p>
-<p>Exploratory Data Analysis (EDA) using histograms showed that “safety” levels (low, medium, high) were evenly distributed across “buying,” “persons,” and “maint,” indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict “safety” using other features, achieved a final accuracy of 0.46% with an optimal k of 17, surpassing random guessing (0.33% for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.</p>
+<p>Exploratory Data Analysis (EDA) using histograms showed that “safety” levels (low, medium, high) were evenly distributed across “buying,” “persons,” and “maint,” indicating no single feature strongly distinguished safety levels independently. The kNN model, trained to predict “safety” using other features, achieved a final accuracy of 0.46 with an optimal k of 17, surpassing random guessing (0.33 for three classes) but suggesting limited predictive power. A confusion matrix heatmap visualized the model’s performance, highlighting prediction accuracies and errors across safety levels.</p>
 <p>The dataset’s cleanliness and balanced feature distributions partially aligned with expectations, given its UCI origin, known for structured datasets. The absence of missing values and duplicates was anticipated, simplifying preprocessing. However, the uniform distribution of “safety” across individual features was unexpected. Real-world data might show biases—e.g., higher safety with lower buying prices or higher maintenance costs due to safety features—yet this dataset lacked such trends, possibly indicating synthetic balancing for algorithmic testing.</p>
-<p>The kNN accuracy of 0.46% was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy increase to 0.4721734% from 0.46% with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.</p>
+<p>The kNN accuracy of 0.46 was lower than ideal but not surprising. The even distribution of safety and lack of strong individual predictors suggested that kNN, reliant on feature proximity, might struggle. The slight accuracy change to 0.4721734 from 0.46 with tuning was expected, though the overall modest performance hinted at complex feature interactions or insufficient predictive signals, aligning with the EDA findings.</p>
 </section>
 <section id="potential-impact" class="level3" data-number="1.4.2">
 <h3 data-number="1.4.2" class="anchored" data-anchor-id="potential-impact"><span class="header-section-number">1.4.2</span> <strong>Potential Impact</strong></h3>
 <p>These results have practical and methodological implications. The preprocessing and encoding workflow offers a replicable approach for handling ordinal categorical data, applicable to fields like healthcare or marketing. The balanced predictors ensure unbiased model training, making this dataset a fair benchmark for algorithmic evaluation.</p>
-<p>However, the kNN’s 0.46% accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.</p>
+<p>However, the kNN’s 0.46 accuracy limits its utility for real-world safety prediction, such as in automotive design or consumer decisions, where higher reliability is critical. The uniform safety distribution suggests unmeasured variables or interactions influence safety, necessitating richer data or advanced models for practical use. This finding could prompt researchers to refine feature selection or engineering strategies when using distance-based methods, influencing future dataset analyses.</p>
 </section>
 <section id="future-questions" class="level3" data-number="1.4.3">
 <h3 data-number="1.4.3" class="anchored" data-anchor-id="future-questions"><span class="header-section-number">1.4.3</span> <strong>Future Questions</strong></h3>
